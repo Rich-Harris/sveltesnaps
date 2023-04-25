@@ -15,7 +15,7 @@ export async function GET({ url, cookies }) {
 		throw new Error('callback URL was called without a code');
 	}
 
-	const { access_token } = await get_token(code);
+	const { access_token } = await get_token(code, url.origin);
 	const user = await get_user(access_token);
 
 	const session = await login({
@@ -28,11 +28,11 @@ export async function GET({ url, cookies }) {
 	throw redirect(307, '/');
 }
 
-async function get_token(code: string) {
+async function get_token(code: string, origin: string) {
 	const data = new URLSearchParams({
 		code,
 		grant_type: 'authorization_code',
-		redirect_uri: 'http://localhost:5173/auth/callback',
+		redirect_uri: `${origin}/auth/callback`,
 		client_id: DISCORD_CLIENT_ID,
 		client_secret: DISCORD_CLIENT_SECRET
 	});
