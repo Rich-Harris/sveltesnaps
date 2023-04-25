@@ -1,0 +1,35 @@
+{
+	"name": "sveltesnaps",
+	"version": "0.0.1",
+	"private": true,
+	"scripts": {
+		"dev": "vite dev",
+		"build": "vite build",
+		"preview": "vite preview",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"lint": "prettier --plugin-search-dir . --check .",
+		"format": "prettier --plugin-search-dir . --write ."
+	},
+	"devDependencies": {
+		"@sveltejs/adapter-vercel": "^2.4.2",
+		"@sveltejs/kit": "^1.15.8",
+		"autoprefixer": "^10.4.14",
+		"postcss": "^8.4.23",
+		"prettier": "^2.8.8",
+		"prettier-plugin-svelte": "^2.10.0",
+		"svelte": "^3.58.0",
+		"svelte-check": "^3.2.0",
+		"tailwindcss": "^3.3.1",
+		"tslib": "^2.5.0",
+		"typescript": "^5.0.4",
+		"vite": "^4.3.1"
+	},
+	"type": "module",
+	"dependencies": {
+		"@vercel/blob": "^0.3.1",
+		"@vercel/postgres": "0.1.0-canary.5",
+		"postgres": "^3.3.4",
+		"svelte-autosize": "^1.1.0"
+	}
+}
