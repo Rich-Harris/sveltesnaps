@@ -24,6 +24,6 @@ export const actions = {
 		if (session) await logout(session);
 
 		cookies.delete('session', { path: '/' });
-		locals.account = undefined;
+		locals.user = undefined;
 	}
 };

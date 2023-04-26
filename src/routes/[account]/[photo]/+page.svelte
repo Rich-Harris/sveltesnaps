@@ -12,7 +12,7 @@
 
 	let now = new Date();
 
-	$: liked_by_user = data.likes.some((like) => like.name === data.account?.name);
+	$: liked_by_user = data.likes.some((like) => like.name === data.user?.name);
 </script>
 
 <p class="mb-4">
@@ -26,15 +26,15 @@
 </figure>
 
 <div class="flex items-center mb-8 gap-2">
-	{#if data.account}
+	{#if data.user}
 		<form
 			method="POST"
 			action="?/toggle_like"
 			use:enhance={() => {
 				if (liked_by_user) {
-					data.likes = data.likes.filter((like) => like.name !== data.account?.name);
+					data.likes = data.likes.filter((like) => like.name !== data.user?.name);
 				} else {
-					data.likes = [data.account, ...data.likes];
+					data.likes = [data.user, ...data.likes];
 				}
 			}}
 		>
@@ -56,7 +56,7 @@
 	</p>
 </div>
 
-{#if data.account}
+{#if data.user}
 	<form
 		class="relative flex mb-4 border-b border-slate-200 focus-within:border-pink-600"
 		method="POST"
@@ -64,7 +64,7 @@
 		use:enhance={() => {
 			pending = true;
 
-			const account = data.account;
+			const account = data.user;
 			if (!account) return; // for typescript
 
 			data.comments = [
@@ -119,7 +119,7 @@
 		</a>
 		<p class="flex-1">{comment.text}</p>
 
-		{#if comment.name === data.account?.name}
+		{#if comment.name === data.user?.name}
 			<form
 				method="POST"
 				action="?/delete_comment"

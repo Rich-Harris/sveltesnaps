@@ -10,17 +10,13 @@
 	<a href="/">SvelteSnaps</a>
 
 	<div class="flex gap-2 items-center">
-		{#if data.account}
+		{#if data.user}
 			<form method="POST" action="/auth?/logout" use:enhance>
 				<button>log out</button>
 			</form>
 
-			<a href="/{data.account.name}">
-				<img
-					class="w-8 h-8 rounded-full"
-					alt={data.account.name}
-					src="{data.account.avatar}?size=64"
-				/>
+			<a href="/{data.user.name}">
+				<img class="w-8 h-8 rounded-full" alt={data.user.name} src="{data.user.avatar}?size=64" />
 			</a>
 		{:else}
 			<form method="POST" action="/auth?/login" use:enhance>
@@ -34,7 +30,7 @@
 	<slot />
 </main>
 
-{#if data.account}
+{#if data.user}
 	<footer class="fixed bottom-0 w-full flex justify-center items-center p-4 border-t bg-white z-10">
 		<Uploader />
 	</footer>

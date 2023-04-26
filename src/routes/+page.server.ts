@@ -7,7 +7,7 @@ export async function load({ locals }) {}
 
 export const actions = {
 	post: async ({ locals, request }) => {
-		if (!locals.account) {
+		if (!locals.user) {
 			throw error(401);
 		}
 
@@ -23,14 +23,14 @@ export const actions = {
 		}
 
 		const ext = file.name.split('.').at(-1);
-		const name = `${locals.account.id}/${Date.now()}.${ext}`;
+		const name = `${locals.user.id}/${Date.now()}.${ext}`;
 
 		const { url } = await blob.put(name, file, {
 			access: 'public',
 			token: BLOB_READ_WRITE_TOKEN
 		});
 
-		const { id } = await create_photo(locals.account.id, url, +width, +height, description);
-		throw redirect(303, `/${locals.account.name}/${id}`);
+		const { id } = await create_photo(locals.user.id, url, +width, +height, description);
+		throw redirect(303, `/${locals.user.name}/${id}`);
 	}
 };

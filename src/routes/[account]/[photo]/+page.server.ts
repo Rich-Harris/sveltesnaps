@@ -17,7 +17,7 @@ export async function load({ params }) {
 
 export const actions = {
 	toggle_like: async ({ locals, params, request }) => {
-		if (!locals.account) throw error(401);
+		if (!locals.user) throw error(401);
 
 		const data = await request.formData();
 
@@ -26,13 +26,13 @@ export const actions = {
 		if (liked) {
 			await sql`
 				INSERT INTO likes (account_id, photo_id)
-				VALUES (${locals.account.id}, ${params.photo})
+				VALUES (${locals.user.id}, ${params.photo})
 				ON CONFLICT DO NOTHING
 			`;
 		} else {
 			await sql`
 				DELETE FROM likes
-				WHERE account_id = ${locals.account.id}
+				WHERE account_id = ${locals.user.id}
 				AND photo_id = ${params.photo}
 			`;
 		}
@@ -43,7 +43,7 @@ export const actions = {
 	update_description: async ({ locals, params, request }) => {},
 
 	post_comment: async ({ locals, params, request }) => {
-		if (!locals.account) throw error(401);
+		if (!locals.user) throw error(401);
 
 		const data = await request.formData();
 
@@ -52,12 +52,12 @@ export const actions = {
 
 		await sql`
 			INSERT INTO comment (account_id, photo_id, text)
-			VALUES (${locals.account.id}, ${params.photo}, ${text})
+			VALUES (${locals.user.id}, ${params.photo}, ${text})
 		`;
 	},
 
 	delete_comment: async ({ locals, params, request }) => {
-		if (!locals.account) throw error(401);
+		if (!locals.user) throw error(401);
 
 		const data = await request.formData();
 
