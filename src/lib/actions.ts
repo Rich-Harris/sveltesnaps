@@ -1,6 +1,5 @@
 export function smoothload(node: HTMLImageElement) {
 	function load() {
-		console.log('node.naturalWidth', node.naturalWidth);
 		if (node.naturalWidth) return; // already loaded
 
 		node.style.opacity = '0';

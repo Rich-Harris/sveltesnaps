@@ -15,8 +15,8 @@ export const actions = {
 
 		const file = form.get('file') as File;
 		const description = form.get('description') as string;
-
-		console.log({ file, description });
+		const width = form.get('width') as string;
+		const height = form.get('height') as string;
 
 		if (!file || !description) {
 			throw error(422);
@@ -30,7 +30,7 @@ export const actions = {
 			token: BLOB_READ_WRITE_TOKEN
 		});
 
-		const photo = await create_photo(locals.account.id, url, description);
-		throw redirect(303, `/${locals.account.name}/${photo.id}`);
+		const { id } = await create_photo(locals.account.id, url, +width, +height, description);
+		throw redirect(303, `/${locals.account.name}/${id}`);
 	}
 };

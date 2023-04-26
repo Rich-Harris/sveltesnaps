@@ -1,12 +1,12 @@
 <script lang="ts">
-	import autosize from 'svelte-autosize';
 	import { enhance } from '$app/forms';
-	import { startViewTransition } from '$lib/utils';
-	import { tick } from 'svelte';
 
 	let file: File | undefined;
 	let description = '';
 	let pending = false;
+
+	let width = 0;
+	let height = 0;
 
 	$: src = file ? URL.createObjectURL(file) : undefined;
 </script>
@@ -32,7 +32,18 @@
 	>
 		<div class="w-screen height-screen max-w-2xl max-h-[96rem] p-8">
 			<div class="flex flex-col bg-white shadow-xl p-8 w-sc rounded-md">
-				<img class="flex-1 mb-4" alt="Preview" {src} />
+				<img
+					class="flex-1 mb-4"
+					alt="Preview"
+					{src}
+					on:load={(e) => {
+						width = e.currentTarget.naturalWidth;
+						height = e.currentTarget.naturalHeight;
+					}}
+				/>
+
+				<input type="hidden" name="width" value={width} />
+				<input type="hidden" name="height" value={height} />
 
 				<div class="relative flex w-full">
 					<input
@@ -62,12 +73,7 @@
 			name="file"
 			accept=".jpg,.jpeg,.png"
 			on:change={(e) => {
-				console.log('change');
 				file = e.currentTarget.files?.[0];
-			}}
-			on:reset={() => {
-				console.log('reset');
-				file = undefined;
 			}}
 		/>
 	</label>

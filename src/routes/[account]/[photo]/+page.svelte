@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { smoothload } from '$lib/actions.js';
 	import Image from '$lib/components/Image.svelte';
 	import autosize from 'svelte-autosize';
 

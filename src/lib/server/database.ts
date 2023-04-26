@@ -67,11 +67,17 @@ export async function get_photo_details(account_name: string, photo_id: string) 
 	};
 }
 
-export async function create_photo(account_id: string, url: string, description: string) {
+export async function create_photo(
+	account_id: string,
+	url: string,
+	width: number,
+	height: number,
+	description: string
+) {
 	const rows = await sql`
-		INSERT INTO photo (account_id, url, description)
-		VALUES (${account_id}, ${url}, ${description})
-		RETURNING *
+		INSERT INTO photo (account_id, url, width, height, description)
+		VALUES (${account_id}, ${url}, ${width}, ${height}, ${description})
+		RETURNING id
 	`;
 
 	const photo = rows[0];
