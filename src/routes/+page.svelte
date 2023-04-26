@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Avatar from '$lib/components/Avatar.svelte';
 	import Image from '$lib/components/Image.svelte';
+	import Login from '$lib/components/Login.svelte';
 	import { ago } from '$lib/utils.js';
 
 	export let data;
@@ -39,4 +40,6 @@
 	{:else}
 		<p>no photos yet. post some, and follow your friends!</p>
 	{/each}
+{:else}
+	<Login>Log in</Login> to upload photos and see your friends' posts!
 {/if}

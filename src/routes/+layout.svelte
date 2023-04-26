@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import Avatar from '$lib/components/Avatar.svelte';
+	import Login from '$lib/components/Login.svelte';
 	import Uploader from '$lib/components/Uploader.svelte';
 	import '../app.css';
 
@@ -18,9 +19,7 @@
 
 			<Avatar name={data.user.name} avatar={data.user.avatar} />
 		{:else}
-			<form method="POST" action="/auth?/login" use:enhance>
-				<button>log in</button>
-			</form>
+			<Login />
 		{/if}
 	</div>
 </nav>

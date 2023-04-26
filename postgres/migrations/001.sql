@@ -4,7 +4,7 @@ CREATE TABLE account (
 	discord_id TEXT NOT NULL,
 	name TEXT NOT NULL,
 	avatar TEXT,
-	UNIQUE(name)
+	UNIQUE(discord_id)
 );
 
 CREATE TABLE follows (
