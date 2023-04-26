@@ -16,10 +16,18 @@
 	$: liked_by_user = data.likes.some((like) => like.name === data.user?.name);
 </script>
 
-<p class="mb-4">
-	posted by <a class="text-pink-600" href="/{data.photo.name}">{data.photo.name}</a>
-	{ago(data.photo.created_at, now)}
-</p>
+<div class="flex items-center justify-between mb-4">
+	<p>
+		posted by <a class="text-pink-600" href="/{data.photo.name}">{data.photo.name}</a>
+		{ago(data.photo.created_at, now)}
+	</p>
+
+	{#if data.photo.name === data.user?.name}
+		<form method="POST" action="?/delete_photo" use:enhance>
+			<button>delete</button>
+		</form>
+	{/if}
+</div>
 
 <figure class="mb-4">
 	<Image photo={data.photo} />
