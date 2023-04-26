@@ -6,7 +6,7 @@
 	export let data;
 </script>
 
-<div class="h-screen flex flex-col">
+<div class="h-[100svh] flex flex-col">
 	<nav class="flex justify-between items-center p-4 border-b">
 		<a href="/">SvelteSnaps</a>
 
