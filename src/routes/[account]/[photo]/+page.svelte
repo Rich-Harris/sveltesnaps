@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { smoothload } from '$lib/actions.js';
+	import Image from '$lib/components/Image.svelte';
 	import autosize from 'svelte-autosize';
 
 	export let data;
@@ -12,7 +14,7 @@
 </script>
 
 <figure class="mb-4">
-	<img class="mb-4" src={data.photo.url} alt={data.photo.description} />
+	<Image photo={data.photo} />
 	<figcaption>{data.photo.description}</figcaption>
 </figure>
 
@@ -41,7 +43,7 @@
 	<p class="flex-1 text-gray-500 text-sm">
 		{#if data.likes.length > 0}
 			liked by {data.likes.length} {data.likes.length === 1 ? 'person' : 'people'}
-		{:else}
+		{:else if data.account}
 			be the first to like this photo
 		{/if}
 	</p>

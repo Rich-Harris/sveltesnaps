@@ -26,6 +26,8 @@ CREATE TABLE photo (
 	account_id UUID NOT NULL,
 	FOREIGN KEY (account_id) REFERENCES account (id),
 	url TEXT NOT NULL,
+	width INTEGER NOT NULL,
+	height INTEGER NOT NULL,
 	description TEXT NOT NULL
 );
 
