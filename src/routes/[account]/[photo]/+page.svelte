@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import Image from '$lib/components/Image.svelte';
+	import { ago } from '$lib/utils.js';
 	import autosize from 'svelte-autosize';
 
 	export let data;
@@ -9,8 +10,15 @@
 	let comment = '';
 	let deleting_ids: string[] = [];
 
+	let now = new Date();
+
 	$: liked_by_user = data.likes.some((like) => like.name === data.account?.name);
 </script>
+
+<p class="mb-4">
+	posted by <a class="text-pink-600" href="/{data.photo.name}">{data.photo.name}</a>
+	{ago(data.photo.created_at, now)}
+</p>
 
 <figure class="mb-4">
 	<Image photo={data.photo} />
@@ -50,7 +58,7 @@
 
 {#if data.account}
 	<form
-		class="relative flex mb-4"
+		class="relative flex mb-4 border-b border-slate-200 focus-within:border-pink-600"
 		method="POST"
 		action="?/post_comment"
 		use:enhance={() => {
@@ -78,17 +86,25 @@
 		}}
 	>
 		<textarea
-			class="w-full h-0 border-b border-slate-200 resize-none p-2 pr-20"
+			class="w-full h-0 resize-none p-2 pr-20 focus-visible:outline-none"
 			name="text"
 			placeholder="leave a comment"
 			required
 			bind:value={comment}
 			use:autosize
+			on:keydown={(e) => {
+				if (e.key === 'Enter') {
+					if (e.shiftKey || e.metaKey) return;
+
+					e.preventDefault();
+					e.target.parentNode.querySelector('button').click();
+				}
+			}}
 		/>
 
 		<button
 			disabled={pending}
-			class="absolute w-16 h-full right-0 transition-opacity"
+			class="absolute w-16 h-full right-0 transition-opacity text-pink-600 focus-visible:outline-none focus-visible:bg-pink-100"
 			class:opacity-0={!comment}
 		>
 			post

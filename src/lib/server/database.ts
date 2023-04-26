@@ -1,4 +1,5 @@
 import { POSTGRES_URL } from '$env/static/private';
+import type { PhotoDetails } from '$lib/types';
 import type { Account, Comment, Photo } from '$lib/types';
 import postgres from 'postgres';
 
@@ -61,7 +62,7 @@ export async function get_photo_details(account_name: string, photo_id: string) 
 	`;
 
 	return {
-		photo: photo as Photo,
+		photo: photo as PhotoDetails,
 		comments: Array.from(comments) as Comment[],
 		likes: Array.from(likes) as Account[]
 	};

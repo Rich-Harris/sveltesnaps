@@ -1,15 +1,29 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { goto } from '$app/navigation';
 
 	let file: File | undefined;
 	let description = '';
 	let pending = false;
 
+	let show = false;
 	let width = 0;
 	let height = 0;
 
 	$: src = file ? URL.createObjectURL(file) : undefined;
 </script>
+
+<svelte:window
+	on:popstate={(e) => {
+		console.log(e.state);
+		show = !!e.state['uploader:show'];
+	}}
+	on:keydown={(e) => {
+		if (show && e.key === 'Escape') {
+			history.back();
+		}
+	}}
+/>
 
 <form
 	class="relative w-8 h-8"
@@ -18,22 +32,38 @@
 	use:enhance={() => {
 		pending = true;
 
-		return async ({ update }) => {
-			await update();
+		return async ({ result, update }) => {
+			if (result.type === 'redirect') {
+				// prevent back navigation from reopening modal
+				history.replaceState({}, '');
+
+				await goto(result.location, {
+					replaceState: true
+				});
+			} else {
+				// TODO handle network errors
+			}
 
 			pending = false;
 			file = undefined;
+			show = false;
 		};
 	}}
 >
+	<!-- svelte-ignore a11y-click-events-have-key-events-->
 	<div
 		class="fixed w-screen h-screen bg-[#ffffff88] backdrop-blur-lg backdrop-grayscale-50 top-0 left-0 flex justify-center items-center"
-		class:hidden={!file}
+		class:hidden={!show}
+		on:click={(e) => {
+			if (show && e.target === e.currentTarget) {
+				history.back();
+			}
+		}}
 	>
-		<div class="w-screen height-screen max-w-2xl max-h-[96rem] p-8">
+		<div class="w-screen height-screen max-w-2xl max-h-[144rem] p-8">
 			<div class="flex flex-col bg-white shadow-xl p-8 w-sc rounded-md">
 				<img
-					class="flex-1 mb-4"
+					class="flex-1 mb-4 object-contain"
 					alt="Preview"
 					{src}
 					on:load={(e) => {
@@ -74,6 +104,11 @@
 			accept=".jpg,.jpeg,.png"
 			on:change={(e) => {
 				file = e.currentTarget.files?.[0];
+
+				if (file) {
+					history.pushState({ 'uploader:show': true }, '');
+					show = true;
+				}
 			}}
 		/>
 	</label>
