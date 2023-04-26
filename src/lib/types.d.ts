@@ -5,6 +5,10 @@ export interface Account {
 	avatar: string;
 }
 
+export interface AccountDetails extends Account {
+	followed_by_user: boolean;
+}
+
 export interface Photo {
 	id: string;
 	created_at: Date;
