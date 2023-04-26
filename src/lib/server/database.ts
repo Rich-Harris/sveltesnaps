@@ -91,27 +91,6 @@ export async function create_photo(
 	} as Photo;
 }
 
-export function login({ name, avatar }: { name: string; avatar: string }) {
-	return sql.begin(async (sql) => {
-		const [account] = await sql`
-			INSERT INTO account (name, avatar)
-			VALUES (${name}, ${avatar})
-			ON CONFLICT (name) DO UPDATE SET avatar = EXCLUDED.avatar
-			RETURNING id
-		`;
-
-		const [session] = await sql`
-			INSERT INTO session (account_id)
-			VALUES (${account.id})
-			RETURNING id
-		`;
-
-		return {
-			id: session.id as string
-		};
-	});
-}
-
 export async function logout(session_id: string) {
 	await sql`
 		DELETE FROM session

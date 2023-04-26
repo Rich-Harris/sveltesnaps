@@ -1,5 +1,5 @@
 import { DISCORD_CLIENT_ID, DISCORD_CLIENT_SECRET } from '$env/static/private';
-import { login } from '$lib/server/database.js';
+import { sql } from '$lib/server/database.js';
 import { error, redirect } from '@sveltejs/kit';
 
 export async function GET({ url, cookies }) {
@@ -18,9 +18,25 @@ export async function GET({ url, cookies }) {
 	const { access_token } = await get_token(code, url.origin);
 	const user = await get_user(access_token);
 
-	const session = await login({
-		name: user.username,
-		avatar: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.webp`
+	const avatar = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.webp`;
+
+	const session = await sql.begin(async (sql) => {
+		const [account] = await sql`
+			INSERT INTO account (discord_id, name, avatar)
+			VALUES (${user.id}, ${user.username}, ${avatar})
+			ON CONFLICT (discord_id) DO UPDATE SET name = EXCLUDED.name, avatar = EXCLUDED.avatar
+			RETURNING id
+		`;
+
+		const [session] = await sql`
+			INSERT INTO session (account_id)
+			VALUES (${account.id})
+			RETURNING id
+		`;
+
+		return {
+			id: session.id as string
+		};
 	});
 
 	cookies.set('session', session.id, { path: '/' });
