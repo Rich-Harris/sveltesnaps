@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import Avatar from '$lib/components/Avatar.svelte';
 	import Image from '$lib/components/Image.svelte';
 	import { ago } from '$lib/utils.js';
 	import autosize from 'svelte-autosize';
@@ -114,9 +115,8 @@
 
 {#each data.comments.filter((comment) => !deleting_ids.includes(comment.id)) as comment}
 	<article class="flex items-center gap-2 mb-2">
-		<a href="/{comment.name}">
-			<img class="w-8 h-8 rounded-full" src={comment.avatar} alt={comment.name} />
-		</a>
+		<Avatar name={comment.name} avatar={comment.avatar} />
+
 		<p class="flex-1">{comment.text}</p>
 
 		{#if comment.name === data.user?.name}

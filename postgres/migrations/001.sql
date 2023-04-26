@@ -2,7 +2,7 @@ CREATE TABLE account (
 	id UUID PRIMARY KEY DEFAULT GEN_RANDOM_UUID(),
 	created_at TIMESTAMP NOT NULL DEFAULT NOW(),
 	name TEXT NOT NULL,
-	avatar TEXT NOT NULL,
+	avatar TEXT,
 	UNIQUE(name)
 );
 

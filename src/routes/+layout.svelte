@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import Avatar from '$lib/components/Avatar.svelte';
 	import Uploader from '$lib/components/Uploader.svelte';
 	import '../app.css';
 
@@ -15,9 +16,7 @@
 				<button>log out</button>
 			</form>
 
-			<a href="/{data.user.name}">
-				<img class="w-8 h-8 rounded-full" alt={data.user.name} src="{data.user.avatar}?size=64" />
-			</a>
+			<Avatar name={data.user.name} avatar={data.user.avatar} />
 		{:else}
 			<form method="POST" action="/auth?/login" use:enhance>
 				<button>log in</button>
