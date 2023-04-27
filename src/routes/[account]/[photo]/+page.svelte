@@ -24,7 +24,7 @@
 
 	{#if data.photo.name === data.user?.name}
 		<form method="POST" action="?/delete_photo" use:enhance>
-			<button>delete</button>
+			<button class="bg-pink-600 text-white px-2 py-1 text-sm rounded-md">delete</button>
 		</form>
 	{/if}
 </div>

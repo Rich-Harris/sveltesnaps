@@ -1,5 +1,5 @@
 import { get_photo_details, sql } from '$lib/server/database.js';
-import { error } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
 
 export async function load({ params }) {
 	const { photo, comments, likes } = await get_photo_details(params.account, params.photo);
@@ -38,7 +38,17 @@ export const actions = {
 		}
 	},
 
-	delete_photo: async ({ locals, params }) => {},
+	delete_photo: async ({ locals, params }) => {
+		if (!locals.user) throw error(401);
+		if (locals.user.name !== params.account) throw error(403);
+
+		await sql`
+			DELETE FROM photo
+			WHERE id = ${params.photo}
+		`;
+
+		throw redirect(303, `/${params.account}`);
+	},
 
 	update_description: async ({ locals, params, request }) => {},
 
