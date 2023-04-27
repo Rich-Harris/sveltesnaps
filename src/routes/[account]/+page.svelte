@@ -1,11 +1,15 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import AvatarImage from '$lib/components/AvatarImage.svelte';
 	import Image from '$lib/components/Image.svelte';
 
 	export let data;
 </script>
 
-<h1 class="text-4xl mb-4">posts by {data.account.name}</h1>
+<h1 class="text-4xl mb-4 flex items-center gap-4">
+	<AvatarImage name={data.account.name} avatar={data.account.avatar} large />
+	posts by {data.account.name}
+</h1>
 
 {#if data.user && data.account.id !== data.user.id}
 	<form

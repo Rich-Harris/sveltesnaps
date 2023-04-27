@@ -1,5 +1,5 @@
 <script lang="ts">
-	import fallback from '$lib/icons/account-circle.svg';
+	import AvatarImage from './AvatarImage.svelte';
 
 	export let name: string;
 	export let avatar: string | null;
@@ -7,7 +7,7 @@
 </script>
 
 <a class="flex items-center gap-2 text-pink-600" href="/{name}">
-	<img class="w-8 h-8 rounded-full" alt={name} src={avatar ?? fallback} />
+	<AvatarImage {name} {avatar} />
 	{#if full}
 		{name}
 	{/if}
