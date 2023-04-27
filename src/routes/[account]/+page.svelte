@@ -7,7 +7,7 @@
 
 <h1 class="text-4xl mb-4">posts by {data.account.name}</h1>
 
-{#if data.account.id !== data.user?.id}
+{#if data.user && data.account.id !== data.user.id}
 	<form
 		class="mb-8"
 		method="POST"
