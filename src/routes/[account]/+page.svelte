@@ -44,7 +44,7 @@
 			<Image {photo} />
 		</a>
 
-		<span class="flex text-sm my-4 h-8 justify-between gap-4 text-gray-500">
+		<span class="flex text-sm mt-4 mb-2 h-8 justify-between gap-4 text-gray-500">
 			<span class="flex items-center gap-2">
 				<span>
 					<span class="hidden sm:inline">posted</span>
