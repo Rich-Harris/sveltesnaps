@@ -9,7 +9,9 @@
 	export let data;
 </script>
 
-<nav class="fixed top-0 w-full flex justify-between items-center px-4 py-2 border-b bg-white z-10">
+<nav
+	class="fixed top-0 w-full h-16 flex justify-between items-center px-4 py-2 border-b bg-white z-10"
+>
 	<a href="/"><img class="w-12 h-12" alt="SvelteSnaps" src={logo} /></a>
 
 	<div class="flex gap-2 items-center">
@@ -25,12 +27,14 @@
 	</div>
 </nav>
 
-<main class="flex-1 px-4 py-24 w-full max-w-2xl mx-auto">
+<main class="flex-1 px-4 py-16 w-full max-w-4xl mx-auto">
 	<slot />
 </main>
 
 {#if data.user}
-	<footer class="fixed bottom-0 w-full flex justify-center items-center p-4 border-t bg-white z-10">
+	<footer
+		class="fixed bottom-0 w-full h-16 flex justify-center items-center p-4 border-t bg-white z-10"
+	>
 		<Uploader />
 	</footer>
 {/if}
