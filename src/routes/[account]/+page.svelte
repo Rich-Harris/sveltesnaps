@@ -40,7 +40,7 @@
 
 {#each data.photos as photo}
 	<div class="my-8">
-		<a href="/{photo.name}/{photo.id}">
+		<a href="/{data.account.name}/{photo.id}">
 			<Image {photo} />
 		</a>
 

@@ -1,6 +1,6 @@
 import { redirect } from '@sveltejs/kit';
 import { DISCORD_CLIENT_ID } from '$env/static/private';
-import { logout } from '$lib/server/database.js';
+import { sql } from '$lib/server/database.js';
 
 export const actions = {
 	login: async ({ cookies, url }) => {
@@ -20,10 +20,16 @@ export const actions = {
 	},
 
 	logout: async ({ cookies, locals }) => {
-		const session = cookies.get('session');
-		if (session) await logout(session);
+		const session_id = cookies.get('session');
+		if (session_id) {
+			await sql`
+				DELETE FROM session
+				WHERE id = ${session_id}
+			`;
 
-		cookies.delete('session', { path: '/' });
+			cookies.delete('session', { path: '/' });
+		}
+
 		locals.user = undefined;
 	}
 };

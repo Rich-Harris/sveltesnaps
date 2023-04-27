@@ -1,18 +1,38 @@
-import { get_account_from_name, get_photos_from_account_id, sql } from '$lib/server/database.js';
+import { sql } from '$lib/server/database.js';
+import type { AccountDetails, PhotoDetails } from '$lib/types.js';
 import { error } from '@sveltejs/kit';
 
 export async function load({ locals, params }) {
-	const account = await get_account_from_name(params.account, locals.user?.id);
+	const [account] = locals.user
+		? await sql`
+			SELECT a.*,
+				CASE WHEN f.account_id IS NOT NULL THEN TRUE ELSE FALSE END AS followed_by_user
+			FROM account a
+			LEFT JOIN follows f ON a.id = f.following_id AND f.account_id = ${locals.user.id}
+			WHERE a.name = ${params.account};
+		`
+		: await sql`
+			SELECT *, FALSE AS followed_by_user FROM account WHERE name = ${params.account}
+		`;
 
 	if (!account) {
 		throw error(404);
 	}
 
-	const photos = await get_photos_from_account_id(account.id, locals.user?.id);
+	const photos = await sql`
+		SELECT p.*, COUNT(DISTINCT l.account_id) AS num_likes, COUNT(DISTINCT c.id) AS num_comments
+		FROM photo p
+		LEFT JOIN likes l ON p.id = l.photo_id
+		LEFT JOIN comment c ON p.id = c.photo_id
+		WHERE p.account_id = ${account.id}
+		GROUP BY p.id
+		ORDER BY p.created_at DESC
+		LIMIT 10;
+	`;
 
 	return {
-		account,
-		photos
+		account: account as AccountDetails,
+		photos: Array.from(photos) as PhotoDetails[]
 	};
 }
 
