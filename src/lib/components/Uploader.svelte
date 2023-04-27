@@ -75,9 +75,9 @@
 				<input type="hidden" name="width" value={width} />
 				<input type="hidden" name="height" value={height} />
 
-				<div class="relative flex w-full">
+				<div class="relative flex w-full border-b border-slate-200 focus-within:border-pink-600">
 					<input
-						class="w-full border-b border-slate-200 resize-none p-2 pr-20"
+						class="w-full border-b border-slate-200 resize-none p-2 pr-20 focus-visible:outline-none"
 						name="description"
 						placeholder="enter a description"
 						required
@@ -86,7 +86,7 @@
 
 					<button
 						disabled={pending}
-						class="absolute w-16 h-full right-0 transition-opacity"
+						class="absolute w-16 h-full right-0 transition-opacity text-pink-600 focus-visible:outline-none focus-visible:bg-pink-100"
 						class:opacity-0={!description}
 					>
 						upload
