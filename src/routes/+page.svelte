@@ -12,10 +12,12 @@
 	<h1 class="text-4xl mb-4">your feed</h1>
 
 	{#each data.photos as photo}
-		<a class="block mb-8 mt-8" href="/{photo.name}/{photo.id}">
-			<Image {photo} />
+		<div class="my-8">
+			<a href="/{photo.name}/{photo.id}">
+				<Image {photo} />
+			</a>
 
-			<div class="flex text-sm mb-2 justify-between gap-4 text-gray-500">
+			<span class="flex text-sm my-4 h-8 justify-between gap-4 text-gray-500">
 				<span class="flex items-center gap-2">
 					<Avatar name={photo.name} avatar={photo.avatar} full />
 
@@ -26,10 +28,10 @@
 				</span>
 
 				<Metadata {photo} />
-			</div>
+			</span>
 
 			<span>{photo.description}</span>
-		</a>
+		</div>
 	{:else}
 		<p>no photos yet. post some, and follow your friends!</p>
 	{/each}

@@ -39,10 +39,12 @@
 {/if}
 
 {#each data.photos as photo}
-	<a class="block mb-8 mt-8" href="/{data.account.name}/{photo.id}">
-		<Image {photo} />
+	<div class="my-8">
+		<a href="/{photo.name}/{photo.id}">
+			<Image {photo} />
+		</a>
 
-		<div class="flex text-sm mb-2 justify-between gap-4 text-gray-500">
+		<span class="flex text-sm my-4 h-8 justify-between gap-4 text-gray-500">
 			<span class="flex items-center gap-2">
 				<span>
 					<span class="hidden sm:inline">posted</span>
@@ -51,8 +53,10 @@
 			</span>
 
 			<Metadata {photo} />
-		</div>
+		</span>
 
 		<span>{photo.description}</span>
-	</a>
+	</div>
+{:else}
+	<p>no photos yet!</p>
 {/each}

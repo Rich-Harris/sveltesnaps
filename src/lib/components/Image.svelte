@@ -6,7 +6,7 @@
 </script>
 
 <div
-	class="relative bg-slate-100 mb-4 w-full rounded-md overflow-hidden shadow-xl"
+	class="block relative bg-slate-100 w-full rounded-md overflow-hidden shadow-xl"
 	style="aspect-ratio: {photo.width / photo.height}"
 >
 	{#key photo}
