@@ -3,13 +3,14 @@
 	import Avatar from '$lib/components/Avatar.svelte';
 	import Login from '$lib/components/Login.svelte';
 	import Uploader from '$lib/components/Uploader.svelte';
+	import logo from '$lib/icons/logo.avif';
 	import '../app.css';
 
 	export let data;
 </script>
 
-<nav class="fixed top-0 w-full flex justify-between items-center p-4 border-b bg-white z-10">
-	<a href="/">SvelteSnaps</a>
+<nav class="fixed top-0 w-full flex justify-between items-center px-4 py-2 border-b bg-white z-10">
+	<a href="/"><img class="w-12 h-12" alt="SvelteSnaps" src={logo} /></a>
 
 	<div class="flex gap-2 items-center">
 		{#if data.user}
