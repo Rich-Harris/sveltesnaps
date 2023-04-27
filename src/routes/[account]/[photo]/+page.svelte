@@ -29,7 +29,7 @@
 
 <figure class="mb-4">
 	<Image photo={data.photo} />
-	<figcaption>{data.photo.description}</figcaption>
+	<figcaption class="mt-4">{data.photo.description}</figcaption>
 </figure>
 
 <div class="flex items-center mb-8 gap-2">
