@@ -2,6 +2,8 @@
 	import { enhance } from '$app/forms';
 	import AvatarImage from '$lib/components/AvatarImage.svelte';
 	import Image from '$lib/components/Image.svelte';
+	import Metadata from '$lib/components/Metadata.svelte';
+	import { ago, now } from '$lib/utils.js';
 
 	export let data;
 </script>
@@ -39,13 +41,18 @@
 {#each data.photos as photo}
 	<a class="block mb-8 mt-8" href="/{data.account.name}/{photo.id}">
 		<Image {photo} />
-		<div class="flex">
-			<!-- TODO truncate long lines with ellipsis -->
-			<span>{photo.description}</span>
 
-			<div class="">
-				<!-- TODO add like button -->
-			</div>
+		<div class="flex text-sm mb-2 justify-between gap-4 text-gray-500">
+			<span class="flex items-center gap-2">
+				<span>
+					<span class="hidden sm:inline">posted</span>
+					{ago(photo.created_at, $now)}
+				</span>
+			</span>
+
+			<Metadata {photo} />
 		</div>
+
+		<span>{photo.description}</span>
 	</a>
 {/each}

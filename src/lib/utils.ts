@@ -1,3 +1,5 @@
+import { readable } from 'svelte/store';
+
 export function startViewTransition(fn) {
 	if (document.startViewTransition) {
 		document.startViewTransition(fn);
@@ -37,3 +39,13 @@ export function ago(a: Date, b: Date) {
 	const years = Math.round(days / 365);
 	return `${years} ${years === 1 ? 'year' : 'years'} ago`;
 }
+
+export const now = readable(new Date(), (set) => {
+	const interval = setInterval(() => {
+		set(new Date());
+	}, 1000);
+
+	return () => {
+		clearInterval(interval);
+	};
+});

@@ -2,11 +2,10 @@
 	import Avatar from '$lib/components/Avatar.svelte';
 	import Image from '$lib/components/Image.svelte';
 	import Login from '$lib/components/Login.svelte';
-	import { ago } from '$lib/utils.js';
+	import Metadata from '$lib/components/Metadata.svelte';
+	import { ago, now } from '$lib/utils.js';
 
 	export let data;
-
-	let now = new Date();
 </script>
 
 {#if data.photos}
@@ -16,26 +15,20 @@
 		<a class="block mb-8 mt-8" href="/{photo.name}/{photo.id}">
 			<Image {photo} />
 
-			<div class="flex">
-				<span class="flex items-center gap-2 text-sm text-gray-500 mb-2">
+			<div class="flex text-sm mb-2 justify-between gap-4 text-gray-500">
+				<span class="flex items-center gap-2">
 					<Avatar name={photo.name} avatar={photo.avatar} full />
 
-					posted {ago(photo.created_at, now)}
+					<span>
+						<span class="hidden sm:inline">posted</span>
+						{ago(photo.created_at, $now)}
+					</span>
 				</span>
 
-				<div class="">
-					<!-- TODO add like button -->
-				</div>
+				<Metadata {photo} />
 			</div>
 
-			<div class="flex">
-				<!-- TODO truncate long lines with ellipsis -->
-				<span>{photo.description}</span>
-
-				<div class="">
-					<!-- TODO add like button -->
-				</div>
-			</div>
+			<span>{photo.description}</span>
 		</a>
 	{:else}
 		<p>no photos yet. post some, and follow your friends!</p>

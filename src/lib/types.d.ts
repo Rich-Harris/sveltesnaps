@@ -22,6 +22,9 @@ export interface Photo {
 export interface PhotoDetails extends Photo {
 	name: string;
 	avatar: string;
+	num_likes: number;
+	num_comments: number;
+	liked_by_user: boolean;
 }
 
 export interface Comment {
