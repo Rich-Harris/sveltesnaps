@@ -10,7 +10,12 @@
 </script>
 
 <div class="fixed w-screen h-screen left-0 top-0 py-16">
-	<Scroller items={data.photos}>
+	<Scroller
+		items={data.photos}
+		on:more={() => {
+			console.log('load more');
+		}}
+	>
 		<div slot="header" class="max-w-2xl px-4 mx-auto">
 			<h1 class="text-4xl mt-8 mb-4 flex items-center gap-4">
 				<AvatarImage name={data.account.name} avatar={data.account.avatar} large />

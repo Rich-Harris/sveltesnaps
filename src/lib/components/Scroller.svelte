@@ -1,7 +1,9 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
 
 	export let items: any[];
+
+	const dispatch = createEventDispatcher();
 
 	let viewport: HTMLDivElement;
 	let scroller: HTMLDivElement;
@@ -62,6 +64,11 @@
 		bottom = 0;
 		for (; i < heights.length; i += 1) {
 			bottom += heights[i];
+		}
+
+		const remaining = scroller.scrollHeight - (scroll + height);
+		if (remaining < 500) {
+			dispatch('more');
 		}
 	}
 
