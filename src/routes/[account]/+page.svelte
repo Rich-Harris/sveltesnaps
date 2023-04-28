@@ -7,13 +7,39 @@
 	import { ago, now } from '$lib/utils.js';
 
 	export let data;
+
+	let scroller: Scroller;
+	let loading = false;
+
+	// TODO this doesn't work if you're scrolled all the
+	// way to the bottom, for some reason
+	export const snapshot = {
+		capture: () => ({
+			data,
+			scroller: scroller.capture()
+		}),
+		restore: (values) => {
+			data = values.data;
+			scroller.restore(values.scroller);
+		}
+	};
 </script>
 
 <div class="fixed w-screen h-screen left-0 top-0 py-16">
 	<Scroller
+		bind:this={scroller}
 		items={data.photos}
-		on:more={() => {
-			console.log('load more');
+		on:more={async () => {
+			if (loading || !data.next) return;
+			loading = true;
+
+			const response = await fetch(`/api/photos/${data.account.id}.json?start=${data.next}`);
+			const { photos, next } = await response.json();
+
+			data.photos = [...data.photos, ...photos];
+			data.next = next;
+
+			loading = false;
 		}}
 	>
 		<div slot="header" class="max-w-2xl px-4 mx-auto">
@@ -58,7 +84,7 @@
 					<span class="flex items-center gap-2">
 						<span>
 							<span class="hidden sm:inline">posted</span>
-							{ago(item.created_at, $now)}
+							{ago(new Date(item.created_at), $now)}
 						</span>
 					</span>
 

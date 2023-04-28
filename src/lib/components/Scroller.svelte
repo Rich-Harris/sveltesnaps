@@ -1,7 +1,30 @@
 <script lang="ts">
-	import { createEventDispatcher, onMount } from 'svelte';
+	import { createEventDispatcher, onMount, tick } from 'svelte';
 
 	export let items: any[];
+
+	export function capture() {
+		const scroll = scroller.scrollTop;
+		return { a, b, top, bottom, heights, scroll };
+	}
+
+	export async function restore(state: {
+		a: number;
+		b: number;
+		top: number;
+		bottom: number;
+		heights: number[];
+		scroll: number;
+	}) {
+		a = state.a;
+		b = state.b;
+		top = state.top;
+		bottom = state.bottom;
+		heights = state.heights;
+
+		await tick();
+		scroller.scrollTo(0, state.scroll);
+	}
 
 	const dispatch = createEventDispatcher();
 
@@ -14,59 +37,60 @@
 	let offset = 0;
 	let top = 0;
 	let bottom = 0;
+	let heights: number[] = [];
 
-	const heights: number[] = [];
+	$: average = heights.reduce((a, b) => a + b, 0) / heights.length;
 
 	function measure(node: HTMLDivElement, id: number) {
 		const height = node.clientHeight;
 		const current_height = heights[id];
 
-		if (current_height !== undefined && current_height !== height) {
-			// adjust scroll to account for resized image
-			if (node.getBoundingClientRect().top < scroller.getBoundingClientRect().top) {
-				scroller.scrollTop += height - current_height;
+		if (current_height !== height) {
+			if (current_height !== undefined) {
+				// adjust scroll to account for resized image
+				if (node.getBoundingClientRect().top < scroller.getBoundingClientRect().top) {
+					scroller.scrollTop += height - current_height;
+				}
 			}
-		}
 
-		heights[id] = height;
+			heights[id] = height;
+		}
 	}
 
 	function handle_resize() {
-		// TODO invalidate heights?
 		offset = content.offsetTop;
 		handle_scroll();
 	}
 
 	function handle_scroll() {
-		const scroll = scroller.scrollTop;
-		const height = viewport.clientHeight;
-
 		let i = 0;
 		let acc = 0;
 
-		for (; i < heights.length; i += 1) {
-			if (acc + heights[i] > scroll - offset) {
+		for (; i < items.length; i += 1) {
+			const height = heights[i] ?? average;
+
+			if (acc + height > scroller.scrollTop - offset) {
 				a = i;
 				top = acc;
 				break;
 			}
-			acc += heights[i];
+			acc += height;
 		}
 
-		for (; i <= heights.length; i += 1) {
-			if (acc >= scroll + height - offset + 200) {
+		for (; i <= items.length; i += 1) {
+			if (acc >= scroller.scrollTop + viewport.clientHeight - offset + 200) {
 				b = i;
 				break;
 			}
-			acc += heights[i];
+			acc += heights[i] ?? average;
 		}
 
 		bottom = 0;
-		for (; i < heights.length; i += 1) {
-			bottom += heights[i];
+		for (; i < items.length; i += 1) {
+			bottom += heights[i] ?? average;
 		}
 
-		const remaining = scroller.scrollHeight - (scroll + height);
+		const remaining = scroller.scrollHeight - (scroller.scrollTop + viewport.clientHeight);
 		if (remaining < 500) {
 			dispatch('more');
 		}

@@ -2,7 +2,7 @@ import { sql } from '$lib/server/database.js';
 import type { AccountDetails, PhotoDetails } from '$lib/types.js';
 import { error } from '@sveltejs/kit';
 
-export async function load({ locals, params }) {
+export async function load({ locals, params, fetch }) {
 	const [account] = locals.user
 		? await sql`
 			SELECT a.*,
@@ -19,20 +19,16 @@ export async function load({ locals, params }) {
 		throw error(404);
 	}
 
-	const photos = await sql`
-		SELECT p.*, COUNT(DISTINCT l.account_id) AS num_likes, COUNT(DISTINCT c.id) AS num_comments
-		FROM photo p
-		LEFT JOIN likes l ON p.id = l.photo_id
-		LEFT JOIN comment c ON p.id = c.photo_id
-		WHERE p.account_id = ${account.id}
-		GROUP BY p.id
-		ORDER BY p.created_at DESC
-		LIMIT 10;
-	`;
+	// we _could_ load the data directly here, but we also want to be able to fetch
+	// the data directly from the browser for the sake of infinite scroll,
+	// so we use an API route instead
+	const response = await fetch(`/api/photos/${account.id}.json`);
+	const { photos, next } = await response.json();
 
 	return {
 		account: account as AccountDetails,
-		photos: Array.from(photos) as PhotoDetails[]
+		photos: photos as PhotoDetails[],
+		next
 	};
 }
 
