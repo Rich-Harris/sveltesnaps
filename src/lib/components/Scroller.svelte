@@ -35,6 +35,7 @@
 		for (; i < heights.length; i += 1) {
 			if (acc + heights[i] > scroll - offset) {
 				a = i;
+				top = acc;
 				break;
 			}
 			acc += heights[i];
@@ -48,8 +49,10 @@
 			acc += heights[i];
 		}
 
-		top = heights.slice(0, a).reduce((a, b) => a + b, 0);
-		bottom = heights.slice(b).reduce((a, b) => a + b, 0);
+		bottom = 0;
+		for (; i < heights.length; i += 1) {
+			bottom += heights[i];
+		}
 	}
 
 	onMount(handle_resize);
