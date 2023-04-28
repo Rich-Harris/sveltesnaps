@@ -13,8 +13,6 @@
 	let top = 0;
 	let bottom = 0;
 
-	$: console.log({ a, b, top, bottom });
-
 	const heights: number[] = [];
 
 	function measure(node: HTMLDivElement, id: number) {
@@ -32,29 +30,26 @@
 		const height = viewport.clientHeight;
 
 		let i = 0;
-		let total = 0;
+		let acc = 0;
 
 		for (; i < heights.length; i += 1) {
-			if (total + heights[i] > scroll - offset) {
+			if (acc + heights[i] > scroll - offset) {
 				a = i;
-				top = total;
 				break;
 			}
-			total += heights[i];
+			acc += heights[i];
 		}
 
 		for (; i <= heights.length; i += 1) {
-			if (total >= scroll + height - offset + 200) {
+			if (acc >= scroll + height - offset + 200) {
 				b = i;
 				break;
 			}
-			total += heights[i];
+			acc += heights[i];
 		}
 
-		bottom = 0;
-		for (let i = b; i < heights.length; i += 1) {
-			bottom += heights[i];
-		}
+		top = heights.slice(0, a).reduce((a, b) => a + b, 0);
+		bottom = heights.slice(b).reduce((a, b) => a + b, 0);
 	}
 
 	onMount(handle_resize);
@@ -63,7 +58,12 @@
 <svelte:window on:resize={handle_resize} />
 
 <div bind:this={viewport} class="w-full h-full overflow-hidden">
-	<div bind:this={scroller} class="w-full h-full overflow-y-scroll" on:scroll={handle_scroll}>
+	<div
+		bind:this={scroller}
+		class="w-full h-full overflow-y-scroll"
+		style="overflow-anchor: none"
+		on:scroll={handle_scroll}
+	>
 		<slot name="header" />
 
 		<div bind:this={content} style:padding-top="{top}px" style:padding-bottom="{bottom}px">
