@@ -76,5 +76,7 @@
 		</Scroller>
 	</div>
 {:else}
-	<Login>Log in</Login> to upload photos and see your friends' posts!
+	<div class="mt-12 text-center">
+		<Login>Log in</Login> to upload photos and see your friends' posts!
+	</div>
 {/if}
