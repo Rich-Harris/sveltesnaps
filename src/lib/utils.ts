@@ -1,5 +1,7 @@
 import { readable } from 'svelte/store';
 
+export const PAGE_SIZE = 5; // TODO make this larger, when there's more photos in the database
+
 export function startViewTransition(fn) {
 	if (document.startViewTransition) {
 		document.startViewTransition(fn);

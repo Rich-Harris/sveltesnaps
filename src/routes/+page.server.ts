@@ -4,44 +4,20 @@ import type { PhotoDetails } from '$lib/types.js';
 import { error, redirect } from '@sveltejs/kit';
 import * as blob from '@vercel/blob';
 
-export async function load({ locals }) {
+export async function load({ locals, fetch }) {
 	if (locals.user) {
-		const photos = await sql`
-			SELECT p.*,
-				a.name,
-				a.avatar,
-				COALESCE(l.num_likes, 0) AS num_likes,
-				COALESCE(c.num_comments, 0) AS num_comments,
-				CASE WHEN ul.photo_id IS NOT NULL THEN TRUE ELSE FALSE END AS liked_by_user
-			FROM photo p
-			JOIN account a ON p.account_id = a.id
-			LEFT JOIN (
-				SELECT photo_id, COUNT(*) AS num_likes
-				FROM likes
-				GROUP BY photo_id
-			) l ON p.id = l.photo_id
-			LEFT JOIN (
-				SELECT photo_id, COUNT(*) AS num_comments
-				FROM comment
-				GROUP BY photo_id
-			) c ON p.id = c.photo_id
-			LEFT JOIN likes ul ON p.id = ul.photo_id AND ul.account_id = ${locals.user.id}
-			WHERE p.account_id IN (
-				SELECT following_id
-				FROM follows
-				WHERE account_id = ${locals.user.id}
-			)
-			OR p.account_id = ${locals.user.id}
-			ORDER BY p.created_at DESC;
-		`;
+		const response = await fetch(`/api/photos/feed.json`);
+		const { photos, next } = await response.json();
 
 		return {
-			photos: Array.from(photos) as PhotoDetails[]
+			photos: photos as PhotoDetails[],
+			next: next as string
 		};
 	}
 
 	return {
-		photos: null
+		photos: null,
+		next: null
 	};
 }
 

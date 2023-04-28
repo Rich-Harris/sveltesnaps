@@ -11,8 +11,6 @@
 	let scroller: Scroller;
 	let loading = false;
 
-	// TODO this doesn't work if you're scrolled all the
-	// way to the bottom, for some reason
 	export const snapshot = {
 		capture: () => ({
 			data,

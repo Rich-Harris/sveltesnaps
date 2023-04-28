@@ -1,8 +1,12 @@
 import { sql } from '$lib/server/database.js';
 import { PAGE_SIZE } from '$lib/utils.js';
-import { json } from '@sveltejs/kit';
+import { error, json } from '@sveltejs/kit';
 
-export async function GET({ locals, params, url }) {
+export async function GET({ locals, url }) {
+	if (!locals.user) {
+		throw error(401);
+	}
+
 	const start = url.searchParams.get('start') ?? sql`now()`;
 
 	const photos = await sql`
@@ -24,8 +28,13 @@ export async function GET({ locals, params, url }) {
 			FROM comment
 			GROUP BY photo_id
 		) c ON p.id = c.photo_id
-		LEFT JOIN likes ul ON p.id = ul.photo_id AND ul.account_id = ${locals.user?.id ?? null}
-		WHERE p.account_id = ${params.account_id}
+		LEFT JOIN likes ul ON p.id = ul.photo_id AND ul.account_id = ${locals.user.id}
+		WHERE (p.account_id IN (
+			SELECT following_id
+			FROM follows
+			WHERE account_id = ${locals.user.id}
+		)
+		OR p.account_id = ${locals.user.id})
 		AND p.created_at < ${start}
 		ORDER BY p.created_at DESC
 		LIMIT ${PAGE_SIZE + 1};
