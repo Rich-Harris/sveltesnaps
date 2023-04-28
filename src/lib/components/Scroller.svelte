@@ -16,7 +16,17 @@
 	const heights: number[] = [];
 
 	function measure(node: HTMLDivElement, id: number) {
-		heights[id] = node.clientHeight;
+		const height = node.clientHeight;
+		const current_height = heights[id];
+
+		if (current_height !== undefined && current_height !== height) {
+			// adjust scroll to account for resized image
+			if (node.getBoundingClientRect().top < scroller.getBoundingClientRect().top) {
+				scroller.scrollTop += height - current_height;
+			}
+		}
+
+		heights[id] = height;
 	}
 
 	function handle_resize() {
