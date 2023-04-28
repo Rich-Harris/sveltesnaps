@@ -16,7 +16,7 @@ export async function load({ locals, fetch }) {
 	}
 
 	return {
-		photos: null,
+		photos: [] as PhotoDetails[],
 		next: null
 	};
 }
