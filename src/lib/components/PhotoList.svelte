@@ -5,6 +5,7 @@
 	import Scroller from '$lib/components/Scroller.svelte';
 	import type { PhotoDetails } from '$lib/types';
 	import { ago, now } from '$lib/utils.js';
+	import { page } from '$app/stores';
 	import { createEventDispatcher } from 'svelte';
 
 	export let photos: PhotoDetails[];
@@ -70,6 +71,12 @@
 
 		<div slot="empty">
 			<slot name="empty" />
+		</div>
+
+		<div slot="footer" class="max-w-2xl px-4 mb-8 mx-auto text-right">
+			{#if next}
+				<a class="text-pink-600" href="{$page.url.pathname}?start={next}">next page</a>
+			{/if}
 		</div>
 	</Scroller>
 </div>

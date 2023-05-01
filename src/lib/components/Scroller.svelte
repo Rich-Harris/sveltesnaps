@@ -119,5 +119,7 @@
 				<slot name="empty" />
 			{/each}
 		</div>
+
+		<slot name="footer" />
 	</div>
 </div>

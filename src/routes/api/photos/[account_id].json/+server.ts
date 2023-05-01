@@ -3,7 +3,7 @@ import { PAGE_SIZE } from '$lib/utils.js';
 import { json } from '@sveltejs/kit';
 
 export async function GET({ locals, params, url }) {
-	const start = url.searchParams.get('start') ?? sql`now()`;
+	const start = url.searchParams.get('start') || sql`now()`;
 
 	const photos = await sql`
 		SELECT p.*,

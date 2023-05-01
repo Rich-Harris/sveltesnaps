@@ -4,9 +4,11 @@ import type { PhotoDetails } from '$lib/types.js';
 import { error, redirect } from '@sveltejs/kit';
 import * as blob from '@vercel/blob';
 
-export async function load({ locals, fetch }) {
+export async function load({ locals, fetch, url }) {
 	if (locals.user) {
-		const response = await fetch(`/api/photos/feed.json`);
+		const response = await fetch(
+			`/api/photos/feed.json?start=${url.searchParams.get('start') || ''}`
+		);
 		const { photos, next } = await response.json();
 
 		return {

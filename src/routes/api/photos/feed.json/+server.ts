@@ -7,7 +7,7 @@ export async function GET({ locals, url }) {
 		throw error(401);
 	}
 
-	const start = url.searchParams.get('start') ?? sql`now()`;
+	const start = url.searchParams.get('start') || sql`now()`;
 
 	const photos = await sql`
 		SELECT p.*,
