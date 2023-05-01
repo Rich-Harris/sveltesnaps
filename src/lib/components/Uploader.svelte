@@ -15,7 +15,6 @@
 
 <svelte:window
 	on:popstate={(e) => {
-		console.log(e.state);
 		show = !!e.state['uploader:show'];
 	}}
 	on:keydown={(e) => {
