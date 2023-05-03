@@ -13,7 +13,7 @@
 	{#key photo}
 		<img
 			class="absolute left-0 top-0 w-full h-full"
-			src={optimize(photo.url)}
+			srcset={optimize(photo.url)}
 			alt={photo.description}
 			use:smoothload
 		/>
