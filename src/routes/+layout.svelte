@@ -33,7 +33,7 @@
 
 {#if data.user}
 	<footer
-		class="fixed bottom-0 w-full h-16 flex justify-center items-center p-4 border-t bg-white z-10"
+		class="fixed bottom-0 w-full h-16 flex justify-center items-center border-t bg-white z-10"
 	>
 		<Uploader />
 	</footer>

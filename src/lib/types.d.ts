@@ -17,6 +17,7 @@ export interface Photo {
 	height: number;
 	description: string;
 	likes: number;
+	published: boolean;
 }
 
 export interface PhotoDetails extends Photo {

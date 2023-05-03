@@ -27,10 +27,10 @@
 	{/if}
 </div>
 
-<figure class="mb-4">
+<div class="mb-4">
 	<Image photo={data.photo} />
-	<figcaption class="mt-4">{data.photo.description}</figcaption>
-</figure>
+	<p class="mt-4">{data.photo.description}</p>
+</div>
 
 <div class="flex items-center mb-8 gap-2">
 	{#if data.user}
@@ -111,8 +111,7 @@
 
 		<button
 			disabled={pending}
-			class="absolute w-16 h-full right-0 transition-opacity text-pink-600 focus-visible:outline-none focus-visible:bg-pink-100"
-			class:opacity-0={!comment}
+			class="absolute w-16 h-full right-0 transition-opacity text-pink-600 focus-visible:outline-none focus-visible:bg-pink-100 opacity-0"
 		>
 			post
 		</button>
@@ -154,5 +153,9 @@
 
 	[aria-label='delete'] {
 		background-image: url($lib/icons/trash.svg);
+	}
+
+	textarea:valid + button {
+		opacity: 1;
 	}
 </style>

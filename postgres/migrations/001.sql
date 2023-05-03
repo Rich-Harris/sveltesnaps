@@ -29,7 +29,8 @@ CREATE TABLE photo (
 	url TEXT NOT NULL,
 	width INTEGER NOT NULL,
 	height INTEGER NOT NULL,
-	description TEXT NOT NULL
+	description TEXT NOT NULL,
+	published boolean NOT NULL DEFAULT false
 );
 
 CREATE TABLE comment (
