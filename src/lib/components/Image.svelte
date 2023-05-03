@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { smoothload } from '$lib/actions';
+	import { optimize } from '$lib/image';
 	import type { Photo } from '$lib/types';
 
 	export let photo: Photo;
@@ -12,7 +13,7 @@
 	{#key photo}
 		<img
 			class="absolute left-0 top-0 w-full h-full"
-			src={photo.url}
+			srcset={optimize(photo.url)}
 			alt={photo.description}
 			use:smoothload
 		/>
