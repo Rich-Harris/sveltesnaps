@@ -35,6 +35,7 @@ export async function GET({ locals, url }) {
 			WHERE account_id = ${locals.user.id}
 		)
 		OR p.account_id = ${locals.user.id})
+		AND p.published = TRUE
 		AND p.created_at < ${start}
 		ORDER BY p.created_at DESC
 		LIMIT ${PAGE_SIZE + 1};

@@ -1,5 +1,6 @@
 import { BLOB_READ_WRITE_TOKEN } from '$env/static/private';
-import { create_photo, sql } from '$lib/server/database.js';
+import { get_dimensions } from '$lib/image-size/index.js';
+import { sql } from '$lib/server/database.js';
 import type { PhotoDetails } from '$lib/types.js';
 import { error, redirect } from '@sveltejs/kit';
 import * as blob from '@vercel/blob';
@@ -32,23 +33,33 @@ export const actions = {
 		const form = await request.formData();
 
 		const file = form.get('file') as File;
-		const description = form.get('description') as string;
-		const width = form.get('width') as string;
-		const height = form.get('height') as string;
+		const description = (form.get('description') as string) ?? '';
 
-		if (!file || !description) {
+		if (!file) {
 			throw error(422);
 		}
 
-		const ext = file.name.split('.').at(-1);
+		const ext = file.name.split('.').at(-1) as 'jpg' | 'png';
 		const name = `${locals.user.id}/${Date.now()}.${ext}`;
+
+		const data = await file.arrayBuffer();
+		const { width, height } = get_dimensions(data, ext);
 
 		const { url } = await blob.put(name, file, {
 			access: 'public',
 			token: BLOB_READ_WRITE_TOKEN
 		});
 
-		const { id } = await create_photo(locals.user.id, url, +width, +height, description);
-		throw redirect(303, `/${locals.user.name}/${id}`);
+		// if no description was provided, it means we came here via a no-JS
+		// form submission, and we need to go to the `/publish` page to finish up
+		const published = !!description;
+
+		const [{ id }] = await sql`
+			INSERT INTO photo (account_id, url, width, height, description, published)
+			VALUES (${locals.user.id}, ${url}, ${width}, ${height}, ${description}, ${published})
+			RETURNING id
+		`;
+
+		throw redirect(303, published ? `/${locals.user.name}/${id}` : `/publish?id=${id}`);
 	}
 };

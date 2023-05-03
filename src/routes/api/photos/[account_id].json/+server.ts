@@ -26,6 +26,7 @@ export async function GET({ locals, params, url }) {
 		) c ON p.id = c.photo_id
 		LEFT JOIN likes ul ON p.id = ul.photo_id AND ul.account_id = ${locals.user?.id ?? null}
 		WHERE p.account_id = ${params.account_id}
+		AND p.published = TRUE
 		AND p.created_at < ${start}
 		ORDER BY p.created_at DESC
 		LIMIT ${PAGE_SIZE + 1};

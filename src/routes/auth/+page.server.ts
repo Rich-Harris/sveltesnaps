@@ -16,7 +16,7 @@ export const actions = {
 		auth.searchParams.set('redirect_uri', `${url.origin}/auth/callback`);
 		auth.searchParams.set('state', state);
 
-		throw redirect(307, auth.href);
+		throw redirect(303, auth.href);
 	},
 
 	logout: async ({ cookies, locals }) => {

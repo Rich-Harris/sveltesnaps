@@ -1,17 +1,41 @@
-import { get_photo_details, sql } from '$lib/server/database.js';
+import { sql } from '$lib/server/database.js';
+import type { Account, Comment, PhotoDetails } from '$lib/types.js';
 import { error, redirect } from '@sveltejs/kit';
 
-export async function load({ params }) {
-	const { photo, comments, likes } = await get_photo_details(params.account, params.photo);
+export async function load({ locals, params }) {
+	const [photo] = await sql`
+		SELECT p.*, a.name, a.avatar
+		FROM photo p
+		INNER JOIN account a ON p.account_id = a.id
+		WHERE p.id = ${params.photo}
+		AND p.published = TRUE
+		AND a.name = ${params.account}
+	`;
 
 	if (!photo) {
 		throw error(404);
 	}
 
+	const comments = await sql`
+		SELECT c.*, a.name, a.avatar
+		FROM comment c
+		INNER JOIN account a ON c.account_id = a.id
+		WHERE c.photo_id = ${params.photo}
+		ORDER BY c.created_at DESC
+	`;
+
+	const likes = await sql`
+		SELECT a.name, a.avatar
+		FROM likes l
+		INNER JOIN account a ON l.account_id = a.id
+		WHERE l.photo_id = ${params.photo}
+		ORDER BY l.created_at DESC
+	`;
+
 	return {
-		photo,
-		comments,
-		likes
+		photo: photo as PhotoDetails,
+		comments: Array.from(comments) as Comment[],
+		likes: Array.from(likes) as Account[]
 	};
 }
 
@@ -66,7 +90,7 @@ export const actions = {
 		`;
 	},
 
-	delete_comment: async ({ locals, params, request }) => {
+	delete_comment: async ({ locals, request }) => {
 		if (!locals.user) throw error(401);
 
 		const data = await request.formData();
@@ -77,6 +101,7 @@ export const actions = {
 		await sql`
 			DELETE FROM comment
 			WHERE id = ${id}
+			AND account_id = ${locals.user.id}
 		`;
 	}
 };
