@@ -1,22 +1,18 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 	import { enhance } from '$app/forms';
-	import { goto } from '$app/navigation';
+	import { goto, pushState } from '$app/navigation';
+	import { page } from '$app/stores';
 
 	let file: File | undefined;
 	let pending = false;
-
-	let show = false;
 
 	$: src = file ? URL.createObjectURL(file) : undefined;
 </script>
 
 <svelte:window
-	on:popstate={(e) => {
-		show = !!e.state['uploader:show'];
-	}}
 	on:keydown={(e) => {
-		if (show && e.key === 'Escape') {
+		if ($page.state.show_uploader && e.key === 'Escape') {
 			history.back();
 		}
 	}}
@@ -30,11 +26,8 @@
 	use:enhance={() => {
 		pending = true;
 
-		return async ({ result, update }) => {
+		return async ({ result }) => {
 			if (result.type === 'redirect') {
-				// prevent back navigation from reopening modal
-				history.replaceState({}, '');
-
 				await goto(result.location, {
 					replaceState: true
 				});
@@ -44,16 +37,15 @@
 
 			pending = false;
 			file = undefined;
-			show = false;
 		};
 	}}
 >
 	<!-- svelte-ignore a11y-click-events-have-key-events-->
 	<div
 		class="fixed w-screen h-screen bg-[#ffffff88] backdrop-blur-lg backdrop-grayscale-50 top-0 left-0 flex justify-center items-center z-10"
-		class:hidden={!show}
+		class:hidden={!$page.state.show_uploader}
 		on:click={(e) => {
-			if (show && e.target === e.currentTarget) {
+			if ($page.state.show_uploader && e.target === e.currentTarget) {
 				history.back();
 			}
 		}}
@@ -94,8 +86,7 @@
 				file = e.currentTarget.files?.[0];
 
 				if (file) {
-					history.pushState({ 'uploader:show': true }, '');
-					show = true;
+					pushState({ show_uploader: true });
 				}
 			}}
 		/>
