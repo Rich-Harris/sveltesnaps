@@ -10,7 +10,7 @@
 	class="block relative bg-slate-100 w-full rounded-md overflow-hidden shadow-xl"
 	style="aspect-ratio: {photo.width / photo.height}"
 >
-	{#key photo}
+	{#key photo.id}
 		<img
 			class="absolute left-0 top-0 w-full h-full"
 			srcset={optimize(photo.url)}
