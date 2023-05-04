@@ -20,6 +20,7 @@ export function smoothload(node: HTMLImageElement) {
 
 	const observer = new MutationObserver((mutations) => {
 		for (const mutation of mutations) {
+			console.log(mutation);
 			if (mutation.attributeName === 'src') {
 				load();
 			}
