@@ -18,7 +18,9 @@ export async function GET({ url, cookies }) {
 	const { access_token } = await get_token(code, url.origin);
 	const user = await get_user(access_token);
 
-	const avatar = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.webp`;
+	const avatar = user.avatar
+		? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.webp`
+		: null;
 
 	const session = await sql.begin(async (sql) => {
 		const [account] = await sql`
