@@ -3,10 +3,13 @@
 	import Image from '$lib/components/Image.svelte';
 	import Metadata from '$lib/components/Metadata.svelte';
 	import Scroller from '$lib/components/Scroller.svelte';
+	import Modal from '$lib/components/Modal.svelte';
+	import PhotoPage from '../../routes/[account]/[photo]/+page.svelte';
 	import type { PhotoDetails } from '$lib/types';
 	import { ago, now } from '$lib/utils.js';
 	import { page } from '$app/stores';
 	import { createEventDispatcher } from 'svelte';
+	import { goto, preloadData, pushState } from '$app/navigation';
 
 	export let photos: PhotoDetails[];
 	export let next: string | null;
@@ -48,7 +51,22 @@
 
 		<div slot="item" class="max-w-2xl px-4 mx-auto" let:item>
 			<div class="my-8">
-				<a href="/{item.name}/{item.id}">
+				<a
+					href="/{item.name}/{item.id}"
+					on:click={async (e) => {
+						e.preventDefault();
+
+						const { href } = e.currentTarget;
+
+						const result = await preloadData(href);
+						if (result.type === 'loaded' && result.status === 200) {
+							pushState({ selected: result.data }, href);
+						} else {
+							// something bad happened! try navigating
+							goto(href);
+						}
+					}}
+				>
 					<Image photo={item} />
 				</a>
 
@@ -80,3 +98,13 @@
 		</div>
 	</Scroller>
 </div>
+
+{#if $page.state.selected}
+	<Modal on:close={() => history.back()}>
+		<div class="w-screen height-screen max-w-2xl max-h-[144rem] p-8">
+			<div class="flex flex-col bg-white shadow-xl p-8 w-sc rounded-md">
+				<PhotoPage data={$page.state.selected} />
+			</div>
+		</div>
+	</Modal>
+{/if}
