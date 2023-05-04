@@ -1,4 +1,6 @@
 export function smoothload(node: HTMLImageElement) {
+	console.log('smoothload', node);
+
 	function load() {
 		if (node.naturalWidth) return; // already loaded
 
