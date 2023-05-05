@@ -14,10 +14,6 @@
 			scroller: list?.capture()
 		}),
 		restore: (values) => {
-			if (!values?.ids) {
-				return;
-			}
-
 			const photos = get_photos_from_ids(values.ids);
 			if (!photos) {
 				// Photos not found, which means this was after a page reload
