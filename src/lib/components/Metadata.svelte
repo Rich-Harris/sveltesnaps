@@ -1,10 +1,10 @@
 <script lang="ts">
-	import type { PhotoListItem } from '$lib/types';
+	import type { PhotoDetails } from '$lib/types';
 	import Comment from '../icons/Comment.svelte';
 	import HeartOutline from '$lib/icons/HeartOutline.svelte';
 	import Heart from '$lib/icons/Heart.svelte';
 
-	export let photo: PhotoListItem;
+	export let photo: PhotoDetails;
 </script>
 
 <a class="flex items-center" href="/{photo.name}/{photo.id}">

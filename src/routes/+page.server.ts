@@ -1,7 +1,7 @@
 import { BLOB_READ_WRITE_TOKEN } from '$env/static/private';
 import { get_dimensions } from '$lib/image-size/index.js';
 import { sql } from '$lib/server/database.js';
-import type { PhotoListItem } from '$lib/types.js';
+import type { PhotoDetails } from '$lib/types.js';
 import { error, redirect } from '@sveltejs/kit';
 import * as blob from '@vercel/blob';
 
@@ -13,13 +13,13 @@ export async function load({ locals, fetch, url }) {
 		const { photos, next } = await response.json();
 
 		return {
-			photos: photos as PhotoListItem[],
+			photos: photos as PhotoDetails[],
 			next: next as string
 		};
 	}
 
 	return {
-		photos: [] as PhotoListItem[],
+		photos: [] as PhotoDetails[],
 		next: null
 	};
 }
