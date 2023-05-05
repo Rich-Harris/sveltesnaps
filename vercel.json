@@ -1,3 +1,3 @@
 {
-	"installCommand": "pnpm i && git clone git@github.com:sveltejs/kit && pnpm link ./kit/packages/kit && cd kit && pnpm i"
+	"installCommand": "pnpm i && git clone git@github.com:sveltejs/kit && pnpm link ./kit/packages/kit && cd kit && git checkout gh-2673 && pnpm i"
 }
