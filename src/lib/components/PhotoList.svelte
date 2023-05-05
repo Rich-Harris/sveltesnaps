@@ -10,9 +10,9 @@
 	import { page } from '$app/stores';
 	import { createEventDispatcher } from 'svelte';
 	import { goto, preloadData, pushState } from '$app/navigation';
-	import type { PhotoDetails } from '$lib/types';
+	import type { PhotoListItem } from '$lib/types';
 
-	export let photos: PhotoDetails[];
+	export let photos: PhotoListItem[];
 	export let next: string | null;
 	export let endpoint: string;
 

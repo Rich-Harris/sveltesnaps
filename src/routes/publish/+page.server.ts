@@ -1,5 +1,5 @@
 import { sql } from '$lib/server/database.js';
-import type { PhotoDetails } from '$lib/types.js';
+import type { PhotoListItem } from '$lib/types.js';
 import { error, redirect } from '@sveltejs/kit';
 
 export async function load({ locals, url }) {
@@ -30,7 +30,7 @@ export async function load({ locals, url }) {
 	}
 
 	return {
-		photo: photo as PhotoDetails
+		photo: photo as PhotoListItem
 	};
 }
 

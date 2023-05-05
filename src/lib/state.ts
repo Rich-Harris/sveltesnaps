@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store';
-import type { Account, Comment, Photo, PhotoDetails } from './types';
+import type { Account, Comment, Photo, PhotoListItem } from './types';
 
 // note: this store will leak memory on the server! luckily, we're using
 // serverless functions, which means we don't need to care — the
@@ -17,7 +17,7 @@ const { subscribe, update } = writable(
 
 export const state = { subscribe };
 
-export function init_photos(photos: PhotoDetails[]) {
+export function init_photos(photos: PhotoListItem[]) {
 	update((lookup) => {
 		for (const photo of photos) {
 			if (!lookup[photo.id]) {

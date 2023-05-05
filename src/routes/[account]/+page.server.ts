@@ -1,5 +1,5 @@
 import { sql } from '$lib/server/database.js';
-import type { AccountDetails, PhotoDetails } from '$lib/types.js';
+import type { AccountDetails, PhotoListItem } from '$lib/types.js';
 import { error } from '@sveltejs/kit';
 
 export async function load({ locals, params, fetch }) {
@@ -27,7 +27,7 @@ export async function load({ locals, params, fetch }) {
 
 	return {
 		account: account as AccountDetails,
-		photos: photos as PhotoDetails[],
+		photos: photos as PhotoListItem[],
 		next
 	};
 }
