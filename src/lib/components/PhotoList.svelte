@@ -58,7 +58,7 @@
 				class="block"
 				style="transform: rotate({0.5 + 1 * (i % 2 ? -1 : 1)}deg)"
 				on:click={async (e) => {
-					if (e.metaKey) return;
+					if (e.metaKey || innerWidth < 640) return;
 
 					e.preventDefault();
 

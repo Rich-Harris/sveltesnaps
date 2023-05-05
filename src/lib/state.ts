@@ -1,6 +1,10 @@
 import { writable } from 'svelte/store';
 import type { Account, Comment, Photo, PhotoDetails } from './types';
 
+// note: this store will leak memory on the server! luckily, we're using
+// serverless functions, which means we don't need to care — the
+// function won't be kept alive long enough for it to matter.
+
 const { subscribe, update } = writable(
 	{} as {
 		[id: string]: {
