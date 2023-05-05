@@ -5,6 +5,7 @@
 	import Heart from '$lib/icons/Heart.svelte';
 	import HeartOutline from '$lib/icons/HeartOutline.svelte';
 	import Trash from '$lib/icons/Trash.svelte';
+	import { update_photo } from '$lib/state.js';
 	import { ago, now } from '$lib/utils.js';
 	import autosize from 'svelte-autosize';
 
@@ -12,6 +13,12 @@
 
 	let pending = false;
 	let deleting_ids: string[] = [];
+
+	sync();
+
+	function sync() {
+		update_photo(data.photo, data.comments, data.likes, data.user);
+	}
 
 	$: liked_by_user = data.likes.some((like) => like.name === data.user?.name);
 </script>
@@ -48,9 +55,12 @@
 					data.likes = [user, ...likes];
 				}
 
+				sync();
+
 				return ({ result }) => {
 					if (result.type !== 'success') {
 						data.likes = likes;
+						sync();
 					}
 				};
 			}}
@@ -97,6 +107,7 @@
 
 			// @ts-ignore
 			data.comments = [comment, ...data.comments];
+			sync();
 
 			form.reset();
 
@@ -108,6 +119,7 @@
 					data.comments = data.comments;
 				} else {
 					update();
+					sync();
 				}
 			};
 		}}
@@ -152,6 +164,7 @@
 					return async ({ result, update }) => {
 						if (result.type === 'success') {
 							data.comments = data.comments.filter((c) => c.id !== comment.id);
+							sync();
 						} else {
 							await update();
 						}
