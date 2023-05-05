@@ -52,7 +52,6 @@
 						<button
 							disabled={pending}
 							class="absolute w-16 h-full right-0 transition-opacity text-pink-600 focus-visible:outline-none focus-visible:bg-pink-100 opacity-0"
-							class:hidden={browser}
 						>
 							upload
 						</button>
