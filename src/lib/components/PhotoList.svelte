@@ -26,7 +26,7 @@
 	let loading = false;
 </script>
 
-<div class="fixed w-screen h-screen left-0 top-0 py-16">
+<div class="fixed w-screen h-screen left-0 top-0 pt-16">
 	<Scroller
 		bind:this={scroller}
 		items={photos}
