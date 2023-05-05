@@ -113,7 +113,7 @@
 		<div bind:this={content} style:padding-top="{top}px" style:padding-bottom="{bottom}px">
 			{#each items.slice(a, b) as item, i (item)}
 				<div class="flow-root" data-item-id={a + i} use:measure={a + i}>
-					<slot name="item" {item} />
+					<slot name="item" {item} i={a + i} />
 				</div>
 			{:else}
 				<slot name="empty" />
