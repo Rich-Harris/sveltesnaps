@@ -26,57 +26,55 @@
 	let loading = false;
 </script>
 
-<div class="fixed w-screen h-screen left-0 top-0 pt-16">
-	<Scroller
-		bind:this={scroller}
-		items={photos}
-		on:more={async () => {
-			if (loading || !next) return;
-			loading = true;
+<Scroller
+	bind:this={scroller}
+	items={photos}
+	on:more={async () => {
+		if (loading || !next) return;
+		loading = true;
 
-			const response = await fetch(`${endpoint}?start=${next}`);
-			const result = await response.json();
+		const response = await fetch(`${endpoint}?start=${next}`);
+		const result = await response.json();
 
-			dispatch('loaded', result);
+		dispatch('loaded', result);
 
-			loading = false;
-		}}
-	>
-		<div slot="header" class="max-w-2xl px-4 mx-auto">
-			<slot name="header" />
-		</div>
+		loading = false;
+	}}
+>
+	<div slot="header" class="max-w-2xl px-4 mx-auto">
+		<slot name="header" />
+	</div>
 
-		<div slot="item" class="max-w-2xl px-4 mx-auto" let:item>
-			<div class="my-8">
-				<a href="/{item.name}/{item.id}">
-					<Image photo={item} />
-				</a>
+	<div slot="item" class="max-w-2xl px-4 mx-auto" let:item>
+		<div class="my-8">
+			<a href="/{item.name}/{item.id}">
+				<Image photo={item} />
+			</a>
 
-				<span class="flex text-sm mt-4 mb-2 h-8 justify-between gap-4 text-gray-500">
-					<span class="flex items-center gap-2">
-						<Avatar name={item.name} avatar={item.avatar} full />
+			<span class="flex text-sm mt-4 mb-2 h-8 justify-between gap-4 text-gray-500">
+				<span class="flex items-center gap-2">
+					<Avatar name={item.name} avatar={item.avatar} full />
 
-						<span>
-							<span class="hidden sm:inline">posted</span>
-							{ago(new Date(item.created_at), $now)}
-						</span>
+					<span>
+						<span class="hidden sm:inline">posted</span>
+						{ago(new Date(item.created_at), $now)}
 					</span>
-
-					<Metadata photo={item} />
 				</span>
 
-				<span>{item.description}</span>
-			</div>
-		</div>
+				<Metadata photo={item} />
+			</span>
 
-		<div slot="empty">
-			<slot name="empty" />
+			<span>{item.description}</span>
 		</div>
+	</div>
 
-		<div slot="footer" class="max-w-2xl px-4 mb-8 mx-auto text-right">
-			{#if next}
-				<a class="text-pink-600" href="{$page.url.pathname}?start={next}">next page</a>
-			{/if}
-		</div>
-	</Scroller>
-</div>
+	<div slot="empty">
+		<slot name="empty" />
+	</div>
+
+	<div slot="footer" class="max-w-2xl px-4 mb-8 mx-auto text-right">
+		{#if next}
+			<a class="text-pink-600" href="{$page.url.pathname}?start={next}">next page</a>
+		{/if}
+	</div>
+</Scroller>

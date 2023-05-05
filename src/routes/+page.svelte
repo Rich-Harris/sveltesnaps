@@ -31,7 +31,7 @@
 </script>
 
 {#if data.user}
-	<div class="fixed w-screen h-screen left-0 top-0 py-16">
+	<div class="fixed w-screen h-screen left-0 top-0 pt-16">
 		<PhotoList
 			bind:this={list}
 			endpoint="/api/photos/feed.json"
