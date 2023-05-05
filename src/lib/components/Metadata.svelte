@@ -16,7 +16,7 @@
 
 		{photo.num_likes}
 		<div class="w-4 h-4">
-			{#if photo.liked_by_user}<Heart />{:else}><HeartOutline />{/if}
+			{#if photo.liked_by_user}<Heart />{:else}<HeartOutline />{/if}
 		</div>
 	</span>
 </a>
