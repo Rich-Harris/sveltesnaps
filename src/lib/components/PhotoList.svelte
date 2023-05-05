@@ -3,12 +3,12 @@
 	import Image from '$lib/components/Image.svelte';
 	import Metadata from '$lib/components/Metadata.svelte';
 	import Scroller from '$lib/components/Scroller.svelte';
-	import type { PhotoDetails } from '$lib/types';
+	import type { PhotoListItem } from '$lib/types';
 	import { ago, now } from '$lib/utils.js';
 	import { page } from '$app/stores';
 	import { createEventDispatcher } from 'svelte';
 
-	export let photos: PhotoDetails[];
+	export let photos: PhotoListItem[];
 	export let next: string | null;
 	export let endpoint: string;
 

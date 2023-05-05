@@ -1,7 +1,7 @@
 import { browser } from '$app/environment';
-import type { Photo, PhotoDetails } from './types';
+import type { Photo, PhotoListItem } from './types';
 
-const cache = new Map<string, PhotoDetails>();
+const cache = new Map<string, PhotoListItem>();
 
 /**
  * Update the cache of photos given the latest photo.
@@ -25,7 +25,7 @@ export function update_photo(
 /**
  * Update the cache of photos given the latest photos.
  */
-export function update_photos(photos: PhotoDetails[]) {
+export function update_photos(photos: PhotoListItem[]) {
 	if (browser) {
 		photos.forEach((photo) => cache.set(photo.id, photo));
 	}
@@ -38,7 +38,7 @@ export function update_photos(photos: PhotoDetails[]) {
  * ids are not in the cache.
  */
 export function get_photos_from_ids(ids: string[]) {
-	const photos: PhotoDetails[] = [];
+	const photos: PhotoListItem[] = [];
 
 	for (const id of ids) {
 		const photo = cache.get(id);
