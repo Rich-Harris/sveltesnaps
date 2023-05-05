@@ -5,6 +5,8 @@
 
 	export let data;
 
+	set_latest(data.photos);
+
 	let list: PhotoList;
 
 	export const snapshot = {
@@ -28,8 +30,6 @@
 			}
 		}
 	};
-
-	$: set_latest(data.photos);
 </script>
 
 {#if data.user}
