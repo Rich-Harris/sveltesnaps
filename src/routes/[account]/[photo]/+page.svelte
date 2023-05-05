@@ -2,6 +2,9 @@
 	import { enhance } from '$app/forms';
 	import Avatar from '$lib/components/Avatar.svelte';
 	import Image from '$lib/components/Image.svelte';
+	import Heart from '$lib/icons/Heart.svelte';
+	import HeartOutline from '$lib/icons/HeartOutline.svelte';
+	import Trash from '$lib/icons/Trash.svelte';
 	import { ago, now } from '$lib/utils.js';
 	import autosize from 'svelte-autosize';
 
@@ -50,7 +53,9 @@
 				class="bg-no-repeat w-8 h-8"
 				name="liked"
 				value={liked_by_user ? 'false' : 'true'}
-			/>
+			>
+				{#if liked_by_user}<Heart />{:else}<HeartOutline />{/if}
+			</button>
 		</form>
 	{/if}
 
@@ -65,7 +70,7 @@
 
 {#if data.user}
 	<form
-		class="relative flex mb-4 border-b border-slate-200 focus-within:border-pink-600"
+		class="relative flex mb-4 border-b border-zinc-200 focus-within:border-pink-600 dark:border-zinc-700"
 		method="POST"
 		action="?/post_comment"
 		use:enhance={() => {
@@ -93,7 +98,7 @@
 		}}
 	>
 		<textarea
-			class="w-full h-10 resize-none p-2 pr-20 focus-visible:outline-none"
+			class="w-full h-10 resize-none p-2 pr-20 focus-visible:outline-none dark:bg-zinc-800"
 			name="text"
 			placeholder="leave a comment"
 			required
@@ -136,25 +141,15 @@
 					};
 				}}
 			>
-				<button name="id" value={comment.id} aria-label="delete" class="bg-no-repeat w-8 h-8" />
+				<button name="id" value={comment.id} aria-label="delete" class="bg-no-repeat w-8 h-8">
+					<Trash />
+				</button>
 			</form>
 		{/if}
 	</article>
 {/each}
 
 <style>
-	[aria-label='like'] {
-		background-image: url($lib/icons/heart-outline.svg);
-	}
-
-	[aria-label='unlike'] {
-		background-image: url($lib/icons/heart.svg);
-	}
-
-	[aria-label='delete'] {
-		background-image: url($lib/icons/trash.svg);
-	}
-
 	textarea:valid + button {
 		opacity: 1;
 	}

@@ -27,6 +27,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@fontsource/pangolin": "^4.5.9",
 		"@vercel/blob": "^0.3.2",
 		"@vercel/postgres": "0.1.0-canary.5",
 		"postgres": "^3.3.4",

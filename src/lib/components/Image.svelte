@@ -7,7 +7,7 @@
 </script>
 
 <div
-	class="block relative bg-slate-100 w-full rounded-md overflow-hidden shadow-xl"
+	class="block relative bg-zinc-100 w-full rounded-md overflow-hidden shadow-xl dark:bg-zinc-800"
 	style="aspect-ratio: {photo.width / photo.height}"
 >
 	{#key photo.id}
