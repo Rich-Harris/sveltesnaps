@@ -26,7 +26,7 @@
 	use:enhance={() => {
 		pending = true;
 
-		return async ({ result, update }) => {
+		return async ({ result }) => {
 			if (result.type === 'redirect') {
 				// prevent back navigation from reopening modal
 				history.replaceState({}, '');
