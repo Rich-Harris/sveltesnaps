@@ -104,7 +104,7 @@
 {#if $page.state.selected}
 	<Modal on:close={() => history.back()}>
 		<div class="w-screen height-screen max-w-4xl max-h-[144rem] p-8">
-			<div class="flex flex-col bg-white shadow-xl p-8 w-sc rounded-md">
+			<div class="flex flex-col bg-white dark:bg-zinc-800 shadow-xl p-8 w-sc rounded-md">
 				<PhotoPage data={$page.state.selected} />
 			</div>
 		</div>
