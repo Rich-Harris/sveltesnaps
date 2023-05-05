@@ -52,6 +52,7 @@
 						<button
 							disabled={pending}
 							class="absolute w-16 h-full right-0 transition-opacity text-pink-600 focus-visible:outline-none focus-visible:bg-pink-100 opacity-0"
+							class:hidden={browser}
 						>
 							upload
 						</button>
@@ -89,7 +90,7 @@
 	}
 
 	/* in browsers without JS, the upload button is visible when the file input is populated */
-	label:has(input[type='file']:valid) button {
+	label:has(input[type='file']:valid) button:not(.hidden) {
 		display: block;
 	}
 

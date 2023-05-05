@@ -75,7 +75,7 @@ export function trapfocus(node: HTMLElement) {
 	return {
 		destroy() {
 			node.removeEventListener('keydown', handleKeydown);
-			previous?.focus();
+			previous?.focus({ preventScroll: true });
 		}
 	};
 }
