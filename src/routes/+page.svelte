@@ -9,11 +9,13 @@
 	export const snapshot = {
 		capture: () => ({
 			data,
-			scroller: list.capture()
+			scroller: list?.capture()
 		}),
 		restore: (values) => {
 			data = values.data;
-			list.restore(values.scroller);
+			if (values.scroller) {
+				list.restore(values.scroller);
+			}
 		}
 	};
 </script>
