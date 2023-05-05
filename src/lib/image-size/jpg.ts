@@ -57,7 +57,7 @@ function extract_orientation(
 				return;
 			}
 
-			// unsinged int has 2 bytes per component
+			// unsigned int has 2 bytes per component
 			// if there would more than 4 bytes in total it's a pointer
 			const number_of_components = view.getUint32(start + 4, is_little_endian);
 			if (number_of_components !== 1) {
@@ -77,7 +77,7 @@ function validate_exif_block(view: DataView, p: number, index: number) {
 	// Ignore Empty EXIF. Validate byte alignment
 	const byte1 = view.getUint8(exif_start + 6);
 	const byte2 = view.getUint8(exif_start + 7);
-	const is_big_endian = byte1 === 0x4d && byte2 === 0x4f;
+	const is_big_endian = byte1 === 0x4d && byte2 === 0x4d;
 	const is_little_endian = byte1 === 0x49 && byte2 === 0x49;
 
 	if (is_big_endian || is_little_endian) {
@@ -124,6 +124,10 @@ export function jpg(data: ArrayBuffer): Size {
 					width: view.getUint16(p + i + 7, false),
 					height: view.getUint16(p + i + 5, false)
 				};
+
+				if (orientation && orientation >= 5 && orientation <= 8) {
+					[size.width, size.height] = [size.height, size.width];
+				}
 
 				// TODO do we need to swap width and height if orientation is 1?
 				return size;
