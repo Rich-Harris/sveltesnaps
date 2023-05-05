@@ -32,10 +32,8 @@
 				data.next = e.detail.next;
 			}}
 		>
-			<h1 slot="header" class="text-4xl mt-8 mb-4 flex items-center gap-4 dark:text-zinc-300">
-				your feed
-			</h1>
-			<p slot="empty">no photos yet. post some, and follow your friends!</p>
+			<h1 slot="header" class="text-4xl mt-8 mb-4 text-center dark:text-zinc-300">your feed</h1>
+			<p slot="empty" class="text-center">no photos yet. post some, and follow your friends!</p>
 		</PhotoList>
 	</div>
 {:else}
