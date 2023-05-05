@@ -22,9 +22,9 @@
 			};
 		}}
 	>
-		<div class="relative flex w-full border-b border-slate-200 focus-within:border-pink-600">
+		<div class="relative flex w-full border-b border-zinc-200 focus-within:border-pink-600">
 			<input
-				class="w-full border-b border-slate-200 resize-none py-2 pr-20 focus-visible:outline-none"
+				class="w-full border-b border-zinc-200 resize-none py-2 pr-20 focus-visible:outline-none"
 				name="description"
 				required
 				autocomplete="off"

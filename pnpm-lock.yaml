@@ -1,6 +1,9 @@
 lockfileVersion: '6.0'
 
 dependencies:
+  '@fontsource/pangolin':
+    specifier: ^4.5.9
+    version: 4.5.9
   '@vercel/blob':
     specifier: ^0.3.2
     version: 0.3.2
@@ -256,6 +259,10 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
+
+  /@fontsource/pangolin@4.5.9:
+    resolution: {integrity: sha512-Ofdh94TJMk+YawvwKDwisIp68l+vJ9Q4sms34xZi61HdqTxoUgdHpvtpf71b+24SO9UkD7ULHnbLPGx4IxXgDA==}
+    dev: false
 
   /@jridgewell/gen-mapping@0.3.3:
     resolution: {integrity: sha512-HLhSWOLRi875zjjMG/r+Nv0oCW8umGb0BgEhyX3dDX3egwZtB8PqLnjz3yedt8R5StBrzcg4aBpnh8UA9D1BoQ==}
