@@ -2,7 +2,6 @@
 	import { enhance } from '$app/forms';
 	import { page } from '$app/stores';
 	import Avatar from '$lib/components/Avatar.svelte';
-	import Login from '$lib/components/Login.svelte';
 	import Uploader from '$lib/components/Uploader.svelte';
 	import '../app.css';
 
@@ -36,7 +35,9 @@
 
 			<Avatar name={data.user.name} avatar={data.user.avatar} />
 		{:else}
-			<Login />
+			<form class="inline" method="POST" action="/auth?/login" use:enhance>
+				<button class="text-pink-600"><slot>log in</slot></button>
+			</form>
 		{/if}
 	</div>
 </nav>
