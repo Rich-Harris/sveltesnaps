@@ -3,7 +3,6 @@
 	import Avatar from '$lib/components/Avatar.svelte';
 	import Login from '$lib/components/Login.svelte';
 	import Uploader from '$lib/components/Uploader.svelte';
-	import logo from '$lib/icons/logo.avif';
 	import '../app.css';
 
 	export let data;
