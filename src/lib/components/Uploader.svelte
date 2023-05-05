@@ -1,23 +1,16 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 	import { enhance } from '$app/forms';
-	import { goto } from '$app/navigation';
+	import { goto, pushState } from '$app/navigation';
+	import { page } from '$app/stores';
 	import Modal from './Modal.svelte';
 	import Publisher from './Publisher.svelte';
 
 	let file: File | undefined;
 	let pending = false;
 
-	let show = false;
-
 	$: src = file ? URL.createObjectURL(file) : undefined;
 </script>
-
-<svelte:window
-	on:popstate={(e) => {
-		show = !!e.state['uploader:show'];
-	}}
-/>
 
 <form
 	class="relative w-full h-full"
@@ -29,9 +22,6 @@
 
 		return async ({ result }) => {
 			if (result.type === 'redirect') {
-				// prevent back navigation from reopening modal
-				history.replaceState({}, '');
-
 				await goto(result.location, {
 					replaceState: true
 				});
@@ -41,11 +31,10 @@
 
 			pending = false;
 			file = undefined;
-			show = false;
 		};
 	}}
 >
-	{#if show}
+	{#if $page.state.show_uploader}
 		<Modal on:close={() => history.back()}>
 			<div class="w-screen height-screen max-w-2xl max-h-[144rem] p-8">
 				<div class="flex flex-col bg-white shadow-xl p-8 w-sc rounded-md">
@@ -68,8 +57,7 @@
 				file = e.currentTarget.files?.[0];
 
 				if (file) {
-					history.pushState({ 'uploader:show': true }, '');
-					show = true;
+					pushState({ show_uploader: true });
 				}
 			}}
 		/>
