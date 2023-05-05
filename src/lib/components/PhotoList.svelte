@@ -48,10 +48,12 @@
 		<slot name="header" />
 	</div>
 
-	<div slot="item" class="max-w-2xl px-4 mx-auto" let:item>
+	<div slot="item" class="max-w-2xl px-4 mx-auto" let:item let:i>
 		<div class="my-8">
 			<a
 				href="/{item.name}/{item.id}"
+				class="block"
+				style="transform: rotate({0.5 + 1 * (i % 2 ? -1 : 1)}deg)"
 				on:click={async (e) => {
 					if (e.metaKey) return;
 
