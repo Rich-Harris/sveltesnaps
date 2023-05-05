@@ -1,11 +1,11 @@
 <script lang="ts">
 	import Login from '$lib/components/Login.svelte';
 	import PhotoList from '$lib/components/PhotoList.svelte';
-	import { get_photos_from_ids, set_latest } from '$lib/photos.js';
+	import { get_photos_from_ids, update_photos } from '$lib/photos.js';
 
 	export let data;
 
-	set_latest(data.photos);
+	update_photos(data.photos);
 
 	let list: PhotoList;
 
@@ -40,7 +40,7 @@
 			photos={data.photos}
 			next={data.next}
 			on:loaded={(e) => {
-				data.photos = [...data.photos, ...set_latest(e.detail.photos)];
+				data.photos = [...data.photos, ...update_photos(e.detail.photos)];
 				data.next = e.detail.next;
 			}}
 		>

@@ -1,15 +1,33 @@
 import { browser } from '$app/environment';
-import type { PhotoDetails } from './types';
+import type { Photo, PhotoDetails } from './types';
 
-const _photos = new Map<string, PhotoDetails>();
+const cache = new Map<string, PhotoDetails>();
+
+/**
+ * Update the cache of photos given the latest photo.
+ */
+export function update_photo(
+	photo: Photo,
+	num_comments: number,
+	num_likes: number,
+	liked_by_user: boolean
+) {
+	if (browser) {
+		const current = cache.get(photo.id);
+		if (current) {
+			cache.set(photo.id, { ...current, ...photo, num_comments, num_likes, liked_by_user });
+		}
+	}
+
+	return photo;
+}
 
 /**
  * Update the cache of photos given the latest photos.
  */
-export function set_latest<T extends PhotoDetails | PhotoDetails[]>(photos: T): T {
+export function update_photos(photos: PhotoDetails[]) {
 	if (browser) {
-		const p = Array.isArray(photos) ? photos : [photos];
-		p.forEach((photo) => _photos.set(photo.id, photo));
+		photos.forEach((photo) => cache.set(photo.id, photo));
 	}
 
 	return photos;
@@ -23,7 +41,7 @@ export function get_photos_from_ids(ids: string[]) {
 	const photos: PhotoDetails[] = [];
 
 	for (const id of ids) {
-		const photo = _photos.get(id);
+		const photo = cache.get(id);
 		if (photo) {
 			photos.push(photo);
 		} else {

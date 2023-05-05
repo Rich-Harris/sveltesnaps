@@ -5,7 +5,7 @@
 	import Heart from '$lib/icons/Heart.svelte';
 	import HeartOutline from '$lib/icons/HeartOutline.svelte';
 	import Trash from '$lib/icons/Trash.svelte';
-	import { set_latest } from '$lib/photos.js';
+	import { update_photo } from '$lib/photos.js';
 	import { ago, now } from '$lib/utils.js';
 	import autosize from 'svelte-autosize';
 
@@ -16,6 +16,10 @@
 	let deleting_ids: string[] = [];
 
 	$: liked_by_user = data.likes.some((like) => like.name === data.user?.name);
+
+	function update_photo_cache() {
+		update_photo(data.photo, data.likes.length, data.comments.length, liked_by_user);
+	}
 </script>
 
 <div class="flex items-center justify-between mt-12 mb-4">
@@ -51,7 +55,7 @@
 				return async ({ update, result }) => {
 					await update();
 					if (result.type === 'success') {
-						set_latest(data.photo);
+						update_photo_cache();
 					}
 				};
 			}}
@@ -103,7 +107,7 @@
 				pending = false;
 				await update();
 				if (result.type === 'success') {
-					set_latest(data.photo);
+					update_photo_cache();
 				}
 			};
 		}}
@@ -149,7 +153,7 @@
 					return async ({ update, result }) => {
 						await update();
 						if (result.type === 'success') {
-							set_latest(data.photo);
+							update_photo_cache();
 							deleting_ids = deleting_ids.filter((id) => id !== comment.id);
 						}
 					};
