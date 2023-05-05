@@ -11,14 +11,6 @@
 	$: src = file ? URL.createObjectURL(file) : undefined;
 </script>
 
-<svelte:window
-	on:keydown={(e) => {
-		if ($page.state.show_uploader && e.key === 'Escape') {
-			history.back();
-		}
-	}}
-/>
-
 <form
 	class="relative w-full h-full"
 	method="POST"
