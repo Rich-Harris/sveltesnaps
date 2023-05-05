@@ -5,6 +5,7 @@
 	import Heart from '$lib/icons/Heart.svelte';
 	import HeartOutline from '$lib/icons/HeartOutline.svelte';
 	import Trash from '$lib/icons/Trash.svelte';
+	import { set_latest } from '$lib/photos.js';
 	import { ago, now } from '$lib/utils.js';
 	import autosize from 'svelte-autosize';
 
@@ -46,6 +47,13 @@
 				} else {
 					data.likes = [data.user, ...data.likes];
 				}
+
+				return async ({ update, result }) => {
+					await update();
+					if (result.type === 'success') {
+						set_latest(data.photo);
+					}
+				};
 			}}
 		>
 			<button
@@ -91,9 +99,12 @@
 				...data.comments
 			];
 
-			return ({ update }) => {
+			return async ({ update, result }) => {
 				pending = false;
-				update();
+				await update();
+				if (result.type === 'success') {
+					set_latest(data.photo);
+				}
 			};
 		}}
 	>
@@ -135,9 +146,12 @@
 				action="?/delete_comment"
 				use:enhance={() => {
 					deleting_ids = [comment.id, ...deleting_ids];
-					return async ({ update }) => {
+					return async ({ update, result }) => {
 						await update();
-						deleting_ids = deleting_ids.filter((id) => id !== comment.id);
+						if (result.type === 'success') {
+							set_latest(data.photo);
+							deleting_ids = deleting_ids.filter((id) => id !== comment.id);
+						}
 					};
 				}}
 			>

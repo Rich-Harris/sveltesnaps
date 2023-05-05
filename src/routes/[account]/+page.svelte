@@ -1,34 +1,40 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { navigating } from '$app/stores';
 	import AvatarImage from '$lib/components/AvatarImage.svelte';
 	import PhotoList from '$lib/components/PhotoList.svelte';
+	import { get_photos_from_ids, set_latest } from '$lib/photos.js';
 
 	export let data;
 
 	let list: PhotoList;
-	let can_restore = false;
-
-	$: if ($navigating) {
-		can_restore = $navigating.type === 'popstate';
-	}
 
 	export const snapshot = {
 		capture: () => ({
-			data,
+			ids: data.photos.map((p) => p.id),
+			next: data.next,
 			scroller: list?.capture()
 		}),
 		restore: (values) => {
-			if (!can_restore) return;
+			if (!values?.ids) {
+				return;
+			}
 
-			data.photos = values.data.photos;
-			data.next = values.data.next;
+			const photos = get_photos_from_ids(values.ids);
+			if (!photos) {
+				// Photos not found, which means this was after a page reload
+				return;
+			}
+
+			data.photos = photos;
+			data.next = values.next;
 
 			if (values.scroller) {
 				list.restore(values.scroller);
 			}
 		}
 	};
+
+	$: set_latest(data.photos);
 </script>
 
 <div class="fixed w-screen h-screen left-0 top-0 py-16">
@@ -38,7 +44,7 @@
 		photos={data.photos}
 		next={data.next}
 		on:loaded={(e) => {
-			data.photos = [...data.photos, ...e.detail.photos];
+			data.photos = [...data.photos, ...set_latest(e.detail.photos)];
 			data.next = e.detail.next;
 		}}
 	>
