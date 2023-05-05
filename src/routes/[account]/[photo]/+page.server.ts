@@ -84,10 +84,13 @@ export const actions = {
 		const text = data.get('text') as string;
 		if (!text) throw error(422);
 
-		await sql`
+		const [{ id }] = await sql`
 			INSERT INTO comment (account_id, photo_id, text)
 			VALUES (${locals.user.id}, ${params.photo}, ${text})
+			returning id;
 		`;
+
+		return { id };
 	},
 
 	delete_comment: async ({ locals, request }) => {

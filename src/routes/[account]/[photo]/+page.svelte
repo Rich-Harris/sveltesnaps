@@ -11,7 +11,6 @@
 	export let data;
 
 	let pending = false;
-	let comment = '';
 	let deleting_ids: string[] = [];
 
 	$: liked_by_user = data.likes.some((like) => like.name === data.user?.name);
@@ -41,11 +40,19 @@
 			method="POST"
 			action="?/toggle_like"
 			use:enhance={() => {
+				const { likes, user } = data;
+
 				if (liked_by_user) {
-					data.likes = data.likes.filter((like) => like.name !== data.user?.name);
+					data.likes = likes.filter((like) => like.name !== user?.name);
 				} else {
-					data.likes = [data.user, ...data.likes];
+					data.likes = [user, ...likes];
 				}
+
+				return ({ result }) => {
+					if (result.type !== 'success') {
+						data.likes = likes;
+					}
+				};
 			}}
 		>
 			<button
@@ -62,7 +69,7 @@
 	<p class="flex-1 text-gray-500 text-sm">
 		{#if data.likes.length > 0}
 			liked by {data.likes.length} {data.likes.length === 1 ? 'person' : 'people'}
-		{:else if data.account}
+		{:else if data.user}
 			be the first to like this photo
 		{/if}
 	</p>
@@ -73,27 +80,35 @@
 		class="relative flex mb-4 border-b border-zinc-200 focus-within:border-pink-600 dark:border-zinc-700"
 		method="POST"
 		action="?/post_comment"
-		use:enhance={() => {
+		use:enhance={({ form, data: formData }) => {
 			pending = true;
 
 			const account = data.user;
 			if (!account) return; // for typescript
 
-			data.comments = [
-				{
-					name: account?.name,
-					avatar: account?.avatar,
-					text: comment,
-					id: '',
-					created_at: new Date(),
-					photo_id: data.photo.id
-				},
-				...data.comments
-			];
+			const comment = {
+				name: account?.name,
+				avatar: account?.avatar,
+				text: formData.get('text'),
+				id: '',
+				created_at: new Date(),
+				photo_id: data.photo.id
+			};
 
-			return ({ update }) => {
+			// @ts-ignore
+			data.comments = [comment, ...data.comments];
+
+			form.reset();
+
+			return ({ result, update }) => {
 				pending = false;
-				update();
+
+				if (result.type === 'success') {
+					comment.id = result.data.id;
+					data.comments = data.comments;
+				} else {
+					update();
+				}
 			};
 		}}
 	>
@@ -102,7 +117,6 @@
 			name="text"
 			placeholder="leave a comment"
 			required
-			bind:value={comment}
 			use:autosize
 			on:keydown={(e) => {
 				if (e.key === 'Enter') {
@@ -135,8 +149,13 @@
 				action="?/delete_comment"
 				use:enhance={() => {
 					deleting_ids = [comment.id, ...deleting_ids];
-					return async ({ update }) => {
-						await update();
+					return async ({ result, update }) => {
+						if (result.type === 'success') {
+							data.comments = data.comments.filter((c) => c.id !== comment.id);
+						} else {
+							await update();
+						}
+
 						deleting_ids = deleting_ids.filter((id) => id !== comment.id);
 					};
 				}}
