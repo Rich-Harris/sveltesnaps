@@ -20,7 +20,7 @@ export interface Photo {
 	published: boolean;
 }
 
-export interface PhotoDetails extends Photo {
+export interface PhotoListItem extends Photo {
 	name: string;
 	avatar: string;
 	num_likes: number;
