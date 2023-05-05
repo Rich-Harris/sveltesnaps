@@ -12,7 +12,8 @@
 			scroller: list.capture()
 		}),
 		restore: (values) => {
-			data = values.data;
+			data.photos = values.data.photos;
+			data.next = values.data.next;
 			list.restore(values.scroller);
 		}
 	};
