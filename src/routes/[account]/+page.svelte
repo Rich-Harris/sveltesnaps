@@ -1,20 +1,32 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { afterNavigate } from '$app/navigation';
 	import AvatarImage from '$lib/components/AvatarImage.svelte';
 	import PhotoList from '$lib/components/PhotoList.svelte';
 
 	export let data;
 
 	let list: PhotoList;
+	let can_restore = false;
+
+	afterNavigate((navigation) => {
+		can_restore = navigation.type === 'popstate';
+	});
 
 	export const snapshot = {
 		capture: () => ({
 			data,
-			scroller: list.capture()
+			scroller: list?.capture()
 		}),
 		restore: (values) => {
-			data = values.data;
-			list.restore(values.scroller);
+			if (!can_restore) return;
+
+			data.photos = values.data.photos;
+			data.next = values.data.next;
+
+			if (values.scroller) {
+				list.restore(values.scroller);
+			}
 		}
 	};
 </script>

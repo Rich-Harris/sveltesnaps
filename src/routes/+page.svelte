@@ -1,10 +1,16 @@
 <script lang="ts">
+	import { afterNavigate } from '$app/navigation';
 	import Login from '$lib/components/Login.svelte';
 	import PhotoList from '$lib/components/PhotoList.svelte';
 
 	export let data;
 
 	let list: PhotoList;
+	let can_restore = false;
+
+	afterNavigate((navigation) => {
+		can_restore = navigation.type === 'popstate';
+	});
 
 	export const snapshot = {
 		capture: () => ({
@@ -12,7 +18,11 @@
 			scroller: list?.capture()
 		}),
 		restore: (values) => {
-			data = values.data;
+			if (!can_restore) return;
+
+			data.photos = values.data.photos;
+			data.next = values.data.next;
+
 			if (values.scroller) {
 				list.restore(values.scroller);
 			}
