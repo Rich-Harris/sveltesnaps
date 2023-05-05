@@ -8,7 +8,6 @@
 	export let data;
 
 	let pending = false;
-	let khsdfbsjdhfgb = '';
 	let deleting_ids: string[] = [];
 
 	$: liked_by_user = data.likes.some((like) => like.name === data.user?.name);
@@ -113,7 +112,6 @@
 			name="text"
 			placeholder="leave a comment"
 			required
-			bind:value={khsdfbsjdhfgb}
 			use:autosize
 			on:keydown={(e) => {
 				if (e.key === 'Enter') {
