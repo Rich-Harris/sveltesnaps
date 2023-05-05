@@ -5,11 +5,12 @@
 	import Scroller from '$lib/components/Scroller.svelte';
 	import Modal from '$lib/components/Modal.svelte';
 	import PhotoPage from '../../routes/[account]/[photo]/+page.svelte';
-	import type { PhotoDetails } from '$lib/types';
+	import { init_photos, state } from '$lib/state.js';
 	import { ago, now } from '$lib/utils.js';
 	import { page } from '$app/stores';
 	import { createEventDispatcher } from 'svelte';
 	import { goto, preloadData, pushState } from '$app/navigation';
+	import type { PhotoDetails } from '$lib/types';
 
 	export let photos: PhotoDetails[];
 	export let next: string | null;
@@ -27,6 +28,8 @@
 
 	let scroller: Scroller;
 	let loading = false;
+
+	$: init_photos(photos);
 </script>
 
 <Scroller
@@ -55,7 +58,7 @@
 				class="block"
 				style="transform: rotate({0.5 + 1 * (i % 2 ? -1 : 1)}deg)"
 				on:click={async (e) => {
-					if (e.metaKey) return;
+					if (e.metaKey || innerWidth < 640) return;
 
 					e.preventDefault();
 
