@@ -1,20 +1,31 @@
 <script lang="ts">
+	import { afterNavigate } from '$app/navigation';
 	import Login from '$lib/components/Login.svelte';
 	import PhotoList from '$lib/components/PhotoList.svelte';
 
 	export let data;
 
 	let list: PhotoList;
+	let can_restore = false;
+
+	afterNavigate((navigation) => {
+		can_restore = navigation.type === 'popstate';
+	});
 
 	export const snapshot = {
 		capture: () => ({
 			data,
-			scroller: list.capture()
+			scroller: list?.capture()
 		}),
 		restore: (values) => {
+			if (!can_restore) return;
+
 			data.photos = values.data.photos;
 			data.next = values.data.next;
-			list.restore(values.scroller);
+
+			if (values.scroller) {
+				list.restore(values.scroller);
+			}
 		}
 	};
 </script>
@@ -31,10 +42,8 @@
 				data.next = e.detail.next;
 			}}
 		>
-			<h1 slot="header" class="text-4xl mt-8 mb-4 flex items-center gap-4 dark:text-zinc-300">
-				your feed
-			</h1>
-			<p slot="empty">no photos yet. post some, and follow your friends!</p>
+			<h1 slot="header" class="text-4xl mt-8 mb-4 text-center dark:text-zinc-300">your feed</h1>
+			<p slot="empty" class="text-center">no photos yet. post some, and follow your friends!</p>
 		</PhotoList>
 	</div>
 {:else}
