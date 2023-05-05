@@ -4,6 +4,7 @@
 	import { goto, pushState } from '$app/navigation';
 	import { page } from '$app/stores';
 	import Modal from './Modal.svelte';
+	import Publisher from './Publisher.svelte';
 
 	let file: File | undefined;
 	let pending = false;
@@ -39,23 +40,7 @@
 				<div class="flex flex-col bg-white shadow-xl p-8 w-sc rounded-md">
 					<img class="flex-1 mb-4 object-contain" alt="Preview" {src} />
 
-					<div class="relative flex w-full border-b border-zinc-200 focus-within:border-pink-600">
-						<input
-							class="w-full border-b border-zinc-200 resize-none p-2 pr-20 focus-visible:outline-none"
-							name="description"
-							autocomplete="off"
-							spellcheck="false"
-							placeholder="enter a description"
-							required={browser}
-						/>
-
-						<button
-							disabled={pending}
-							class="absolute w-16 h-full right-0 transition-opacity text-pink-600 focus-visible:outline-none focus-visible:bg-pink-100 opacity-0"
-						>
-							upload
-						</button>
-					</div>
+					<Publisher disabled={pending} />
 				</div>
 			</div>
 		</Modal>
@@ -115,22 +100,8 @@
 </form>
 
 <style>
-	/* label {
-		background-image: url($lib/icons/camera-plus.svg);
-		background-size: 2rem 2rem;
-		background-position: 50% 50%;
-	} */
-
 	/* in browsers without JS, the upload button is visible when the file input is populated */
 	input[type='file']:valid + svg + button:not(:disabled) {
 		display: block;
 	}
-
-	input[name='description']:valid + button {
-		opacity: 1;
-	}
-
-	/* label {
-		filter: drop-shadow(0 -1px 4px rgba(255, 255, 255, 0.1));
-	} */
 </style>
