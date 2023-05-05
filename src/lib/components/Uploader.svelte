@@ -16,11 +16,6 @@
 	on:popstate={(e) => {
 		show = !!e.state['uploader:show'];
 	}}
-	on:keydown={(e) => {
-		if (show && e.key === 'Escape') {
-			history.back();
-		}
-	}}
 />
 
 <form
