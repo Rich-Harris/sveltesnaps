@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { afterNavigate } from '$app/navigation';
+	import { navigating } from '$app/stores';
 	import Login from '$lib/components/Login.svelte';
 	import PhotoList from '$lib/components/PhotoList.svelte';
 
@@ -8,9 +8,9 @@
 	let list: PhotoList;
 	let can_restore = false;
 
-	afterNavigate((navigation) => {
-		can_restore = navigation.type === 'popstate';
-	});
+	$: if ($navigating) {
+		can_restore = $navigating.type === 'popstate';
+	}
 
 	export const snapshot = {
 		capture: () => ({

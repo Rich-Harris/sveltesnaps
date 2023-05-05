@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { page } from '$app/stores';
 	import Avatar from '$lib/components/Avatar.svelte';
 	import Login from '$lib/components/Login.svelte';
 	import Uploader from '$lib/components/Uploader.svelte';
@@ -40,14 +41,10 @@
 	</div>
 </nav>
 
-<main class="flex-1 px-4 py-16 w-full max-w-4xl mx-auto dark:bg-zinc-900">
+<main class="flex-1 px-4 pt-16 w-full max-w-4xl mx-auto dark:bg-zinc-900">
 	<slot />
 </main>
 
-{#if data.user}
-	<footer
-		class="fixed bottom-0 w-full h-16 flex justify-center items-center border-t z-10 bg-white dark:bg-zinc-800 dark:border-zinc-700"
-	>
-		<Uploader />
-	</footer>
+{#if data.user && $page.url.pathname !== '/publish'}
+	<Uploader />
 {/if}
