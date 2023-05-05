@@ -13,7 +13,7 @@
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-vercel": "^2.4.3",
-		"@sveltejs/kit": "^1.15.10",
+		"@sveltejs/kit": "^1.16.2",
 		"autoprefixer": "^10.4.14",
 		"postcss": "^8.4.23",
 		"prettier": "^2.8.8",
