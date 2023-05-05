@@ -6,8 +6,6 @@
 
 	export let data;
 
-	update_photos(data.photos);
-
 	let list: PhotoList;
 
 	export const snapshot = {
@@ -31,6 +29,8 @@
 			}
 		}
 	};
+
+	$: update_photos(data.photos);
 </script>
 
 <div class="fixed w-screen h-screen left-0 top-0 py-16">
