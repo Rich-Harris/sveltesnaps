@@ -2,7 +2,7 @@ import { sql } from '$lib/server/database.js';
 import type { Account, Comment, PhotoDetails } from '$lib/types.js';
 import { error, redirect } from '@sveltejs/kit';
 
-export async function load({ locals, params }) {
+export async function load({ params }) {
 	const [photo] = await sql`
 		SELECT p.*, a.name, a.avatar
 		FROM photo p
