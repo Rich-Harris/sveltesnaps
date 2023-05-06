@@ -2,7 +2,7 @@ import { sql } from '$lib/server/database.js';
 import type { AccountDetails, PhotoListItem } from '$lib/types.js';
 import { error } from '@sveltejs/kit';
 
-export async function load({ locals, params, fetch }) {
+export async function load({ locals, params, fetch, url }) {
 	const [account] = locals.user
 		? await sql`
 			SELECT a.*,
@@ -22,7 +22,9 @@ export async function load({ locals, params, fetch }) {
 	// we _could_ load the data directly here, but we also want to be able to fetch
 	// the data directly from the browser for the sake of infinite scroll,
 	// so we use an API route instead
-	const response = await fetch(`/api/photos/${account.id}.json`);
+	const response = await fetch(
+		`/api/photos/${account.id}.json?start=${url.searchParams.get('start') ?? ''}`
+	);
 	const { photos, next } = await response.json();
 
 	return {
