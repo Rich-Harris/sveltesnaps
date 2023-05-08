@@ -5,7 +5,7 @@
 	import Heart from '$lib/icons/Heart.svelte';
 	import HeartOutline from '$lib/icons/HeartOutline.svelte';
 	import Trash from '$lib/icons/Trash.svelte';
-	import { update_photo } from '$lib/state.js';
+	import { getStateContext } from '$lib/state.js';
 	import { ago, now } from '$lib/utils.js';
 	import autosize from 'svelte-autosize';
 
@@ -15,6 +15,8 @@
 	let deleting_ids: string[] = [];
 
 	sync();
+
+	const { update_photo } = getStateContext();
 
 	function sync() {
 		update_photo(data.photo, data.comments, data.likes, data.user);

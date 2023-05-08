@@ -3,9 +3,11 @@
 	import Comment from '../icons/Comment.svelte';
 	import HeartOutline from '$lib/icons/HeartOutline.svelte';
 	import Heart from '$lib/icons/Heart.svelte';
-	import { state } from '$lib/state.js';
+	import { getStateContext } from '$lib/state.js';
 
 	export let photo: PhotoListItem;
+
+	const { state } = getStateContext();
 </script>
 
 <a class="flex items-center" href="/{photo.name}/{photo.id}">
