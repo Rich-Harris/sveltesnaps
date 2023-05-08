@@ -6,7 +6,7 @@ const config = {
 	preprocess: vitePreprocess(),
 
 	kit: {
-		adapter: adapter()
+		adapter: adapter({ runtime: 'edge', region: 'iad' })
 	},
 
 	vitePlugin: {
