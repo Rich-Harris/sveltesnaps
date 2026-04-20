@@ -66,7 +66,7 @@
 
 					const result = await preloadData(href);
 					if (result.type === 'loaded' && result.status === 200) {
-						pushState({ selected: result.data }, href);
+						pushState(href, { selected: result.data });
 					} else {
 						// something bad happened! try navigating
 						goto(href);

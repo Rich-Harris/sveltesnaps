@@ -57,7 +57,7 @@
 				file = e.currentTarget.files?.[0];
 
 				if (file) {
-					pushState({ show_uploader: true });
+					pushState('', { show_uploader: true });
 				}
 			}}
 		/>
