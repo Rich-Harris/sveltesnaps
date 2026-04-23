@@ -5,9 +5,12 @@
 	import Login from '$lib/components/Login.svelte';
 	import Uploader from '$lib/components/Uploader.svelte';
 	import Logo from '$lib/icons/Logo.svelte';
+	import { setStateContext } from '$lib/state';
 	import '../app.css';
 
 	export let data;
+
+	setStateContext();
 </script>
 
 <nav

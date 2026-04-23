@@ -5,7 +5,7 @@
 	import Scroller from '$lib/components/Scroller.svelte';
 	import Modal from '$lib/components/Modal.svelte';
 	import PhotoPage from '../../routes/[account]/[photo]/+page.svelte';
-	import { init_photos, state } from '$lib/state.js';
+	import { getStateContext } from '$lib/state.js';
 	import { ago, now } from '$lib/utils.js';
 	import { page } from '$app/stores';
 	import { createEventDispatcher } from 'svelte';
@@ -25,6 +25,7 @@
 	}
 
 	const dispatch = createEventDispatcher();
+	const { init_photos } = getStateContext();
 
 	let scroller: Scroller;
 	let loading = false;
